@@ -29,27 +29,6 @@
   </url>
   
   <url>
-    <loc>/posts/hamlet/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/posts/jc/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/posts/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/posts/rj/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/about/</loc>
     <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url>
@@ -60,7 +39,25 @@
   </url>
   
   <url>
+    <loc>/posts/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tutorials/assignment1/</loc>
+  </url>
+  
+  <url>
+    <loc>/posts/assignment1/</loc>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tutorials/</loc>
     <priority>0</priority>
   </url>
   

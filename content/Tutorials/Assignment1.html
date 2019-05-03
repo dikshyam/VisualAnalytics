@@ -1,212 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-    
-    
+---
+title: "Random Forest Tutorial"
+output: html_document
+---
 
-
-    <head>
-    <link href="https://gmpg.org/xfn/11" rel="profile">
-    <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
-<!-- Enable responsiveness on mobile devices -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.5" />
-
-    
-    
-    
-
-<title>Random Forest Tutorial • Dikshya Mohanty</title>
-
-
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Random Forest Tutorial"/>
-<meta name="twitter:description" content="This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i."/>
-
-<meta property="og:title" content="Random Forest Tutorial" />
-<meta property="og:description" content="This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/assignment1/" />
-<meta property="og:site_name" content="Title" />
-
-
-    
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/scss/hyde-hyde.6a83d62c39a364f036df4db1ecd564645635d6c7fc182425cb501218fec485f5.css" integrity="sha256-aoPWLDmjZPA2302x7NVkZFY11sf8GCQly1ASGP7EhfU=">
-
-
-<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
-
-
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <!-- Icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-    <link rel="shortcut icon" href="/favicon.png">
-    
-</head>
-
-
-    <body class=" ">
-    
-<div class="sidebar">
-  <div class="container ">
-    <div class="sidebar-about">
-      <span class="site__title">
-        <a href="/">Dikshya Mohanty</a>
-      </span>
-      
-        
-        
-        
-        <div class="author-image">
-          <img src="/img/dp1.jpg" alt="Author Image" class="img--circle img--headshot element--center">
-        </div>
-        
-      
-      
-      <p class="site__description">
-        
-      </p>
-    </div>
-    <div class="collapsible-menu">
-      <input type="checkbox" id="menuToggle">
-      <label for="menuToggle">Dikshya Mohanty</label>
-      <div class="menu-content">
-        <div>
-	<ul class="sidebar-nav">
-		 
-		 
-			 
-				<li>
-					<a href="/education/">
-						<span>Education</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/professionalsummary/">
-						<span>Professional Summary</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/projects/">
-						<span>Projects</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/about/">
-						<span>About</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/posts/">
-						<span>Good Reads</span>
-					</a>
-				</li>
-			 
-		
-		</li>
-	</ul>
-</div>
-
-        <section class="social">
-	
-	
-	
-	<a href="https://github.com/Dikshyam" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
-	
-	
-	
-	
-	
-	
-	<a href="https://instagram.com/dikshyamohanty_" rel="me"><i class="fab fa-instagram fa-lg" aria-hidden="true"></i></a>
-	
-	
-	<a href="https://linkedin.com/in/dikshya-mohanty-79b61ba3" rel="me"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
-	
-	
-	
-	
-	
-	
-	
-	
-	<a href="mailto:dmohanty@uncc.edu" rel="me"><i class="fas fa-at fa-lg" aria-hidden="true"></i></a>
-	
-</section>
-
-      </div>
-    </div>
-    
-<div class="copyright">
-  &copy; 2019 htr3n
-  
-    <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>
-  
-</div>
-
-
-<div class="builtwith">
-Built with <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
-</div>
-
-
-  </div>
-</div>
-
-        <div class="content container">
-            
-    
-<article>
-  <header>
-    <h1>Random Forest Tutorial</h1>
-    
-    
-<div class="post__meta">
-    
-    
-    
-    
-    
-    
-    <br/>
-    <i class="fas fa-clock"></i> 32 min read
-</div>
-
-
-  </header>
-  
-  
-  <div class="post">
-    
 
 
 <p>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.e. continuous target variable) but it mainly performs well on classification tasks (i.e. categorical target variable). It has become a lethal weapon of modern data scientists to refine the predictive model. The best part of the algorithm is that there are very few assumptions attached to it so data preparation is less challenging which makes the use of the algorithm easier and faster. It’s listed as a top algorithm (with ensembling) in Kaggle Competitions.</p>
@@ -829,7 +625,7 @@ mtry &lt;- tuneRF(train_data[-26], train_data$gen_election, ntreeTry=70,  stepFa
 ## Searching right ...
 ## mtry = 7     OOB error = 6.46% 
 ## -0.07692308 0.01</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>Value for mtry = 4</p>
 <pre class="r"><code>set.seed(42)
 finalrf = randomForest(gen_election~., data=train_data, ntree=70, mtry=4, na.action=na.exclude, importance=T, proximity=F)
@@ -918,14 +714,14 @@ ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
   geom_ribbon(alpha=0.2) +
   geom_line(aes(y=tpr)) +
   ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 <div id="points-use-varimpplot-to-create-the-plot-for-variable-importance.-what-are-the-type-five-important-variables-when-we-use-meandecreaseaccuracy" class="section level5">
 <h5>9.10. (4 points) Use varImpPlot() to create the plot for variable importance. What are the type five important variables when we use MeanDecreaseAccuracy?</h5>
 <p>Opp_fund, other_pol_cmte_contrib, facebook, coh_cop, cand_pty_affiliation</p>
 <pre class="r"><code>varImpPlot(rf)</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 </div>
 <div id="use-librarynnet-and-the-code-in-module-6-to-build-a-neural-network-classifier." class="section level4">
@@ -1053,7 +849,7 @@ ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
   geom_ribbon(alpha=0.2) +
   geom_line(aes(y=tpr)) +
   ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 </div>
 <div id="points-increase-the-number-of-hidden-nodes-until-you-get-the-following-error-error-in-nnet.defaultx-y-w-entropy-true-too-many-1026-weights.-use-the-maximum-number-of-hidden-nodes-that-you-can-use-to-build-your-ann-classifier." class="section level5">
@@ -1126,7 +922,7 @@ ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
   geom_ribbon(alpha=0.2) +
   geom_line(aes(y=tpr)) +
   ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 <div id="points-among-the-three-classifiers-that-you-built-which-classifier-would-you-finally-use-for-predicting-the-elections-outcome-please-explain." class="section level6">
 <h6>11. (5 points) Among the three classifiers that you built, which classifier would you finally use for predicting the election’s outcome? Please explain.</h6>
@@ -1208,14 +1004,14 @@ WwithSM</code></pre>
 <pre class="r"><code>set.seed(62)
 rfSM &lt;- randomForest(gen_election~facebook+youtube+twitter, data=data, na.action=na.exclude, importance=T, proximity=F)
 varImpPlot(rfSM)</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>On using a RF to predict the target variable with the three social media platforms so as to access the importance of each platform, we find out that youtube has the highest value. But if we check our final RF with Test Data only, we see that facebook is at the top of the 3 platforms. I’d say all 3 are equally important but the priority lost would be: 1. Youtube 2. Facebook 3. Twitter (1 - highest, 3 - lowest)</p>
 </div>
 <div id="points-given-your-analysis-would-you-agree-with-this-statement-money-buys-political-power-please-explain." class="section level6">
 <h6>13. (10 points) Given your analysis, would you agree with this statement: “Money Buys Political Power”? Please explain.</h6>
 <p>Yes, we can rightously say that “Money buys Political Power”. Let’s look at our RF model varImpPlot Chart:</p>
 <pre class="r"><code>varImpPlot(finalrf)</code></pre>
-<p><img src="/posts/Assignment1_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="/Tutorials/Assignment1_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>Both of the charts above have some kind of money related factors in the top 5 most important determining factors, either for social media or campaigning. So more the investment is by a candidate, higher are the chances of winning.</p>
 </div>
 <div id="points-imagine-that-you-are-an-advisor-to-a-candidate-who-is-running-for-a-congressional-seat.-based-on-your-analysis-what-are-your-prescriptions-for-success-for-your-candidate-please-explain." class="section level6">
@@ -1223,49 +1019,3 @@ varImpPlot(rfSM)</code></pre>
 <p>From the variable Importance plot using MeanDecreaseAccuracy and MeanDecease Gini, the most important variables affected a candidates success are opp_fund, other_pol_cmte_contrib, coh_cop, facebook, ttl_disb, From this we can say that money is the deciding factor, the bigger the amount of money you put into the campaigns, the more is the probability of winning. Another significant variable, other than money, is CAND_PTY_AFFILIATION, which one might consider looking into. Moving on: - We can select features based on by making a correlation matrix and taking into account the features which are highly correlated to the target variable(in the range [-1,+1]) - We can perform dimensionality reduction in case our predictor variables are highly correlated. - We can run Logistic Regression on this data and check the coefficients to confirm our results.</p>
 </div>
 </div>
-
-  </div>
-  
-
-<div class="navigation navigation-single">
-    
-    
-</div>
-
-
-  
-
-  
-    
-
-
-</article>
-
-
-        </div>
-        
-    
-
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
-
-
-    
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
-        
-    
-    <script type="text/javascript">
-        
-        hljs.initHighlightingOnLoad();
-    </script>
-    
-
-
-
-
-    
-
-
-
-    </body>
-</html>

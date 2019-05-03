@@ -61,36 +61,6 @@ A semi-automatic text extraction and grouping of theoretical constructs and vari
     </item>
     
     <item>
-      <title>Hamlet</title>
-      <link>/posts/hamlet/</link>
-      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/hamlet/</guid>
-      <description>Prince Hamlet’s student friend, Horatio, goes to the battlements of Denmark’s Elsinore castle late at night to meet the guards. They tell him about a ghost they have seen that resembles the late king, Hamlet. It reappears and they decide to tell the prince. Hamlet’s uncle, Claudius, having become king, has now married Hamlet’s widowed mother, Gertrude.
-In the court, after envoys are sent to Norway, the prince is dissuaded from returning to university.</description>
-    </item>
-    
-    <item>
-      <title>Julius Caesar</title>
-      <link>/posts/jc/</link>
-      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/jc/</guid>
-      <description>The tribunes, Marullus and Flavius, break up a gathering of Roman citizens who seek to celebrate Julius Caesar’s triumphant return from war. The victory is marked by public games in which Caesar’s friend, Mark Antony, takes part. On his way to the arena Caesar is stopped by a stranger who warns that he should ‘Beware the Ides (15th) of March.’
-Fellow senators, Caius Cassius and Marcus Brutus, are suspicious of Caesar’s reactions to the power he holds in the Republic.</description>
-    </item>
-    
-    <item>
-      <title>Romeo and Juliet</title>
-      <link>/posts/rj/</link>
-      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/rj/</guid>
-      <description>On a hot morning fighting by young servants of the Capulet and Montague families is stopped by the Prince who tells them that the next person who breaks the peace will be punished with death.
-Capulet plans a feast to introduce his daughter, Juliet, who is almost fourteen, to the Count Paris who would like to marry her. By a mistake of the illiterate servant Peter, Montague’s son, Romeo, and his friends Benvolio and the Prince’s cousin Mercutio, hear of the party and decide to go in disguise.</description>
-    </item>
-    
-    <item>
       <title>About Me</title>
       <link>/about/</link>
       <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
@@ -100,6 +70,24 @@ Capulet plans a feast to introduce his daughter, Juliet, who is almost fourteen,
 Skills and Technical Summary:  Statistics and Visualization Softwares: SAS, R Studio, Tableau, SPSS, Anaconda, PostGre, Matlab, STATA
  Programming Languages: Python, SQL, SAS, R, JavaScript, Java, Scala, Perl
  Technical Skills: Machine Learning and AI, Deep Learning and Neural Networks, Statistics, Data Analytics, Business Intelligence, Cross-Section and Time Series Analysis, AWS</description>
+    </item>
+    
+    <item>
+      <title>Random Forest Tutorial</title>
+      <link>/tutorials/assignment1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tutorials/assignment1/</guid>
+      <description>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.</description>
+    </item>
+    
+    <item>
+      <title>Random Forest Tutorial</title>
+      <link>/posts/assignment1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/assignment1/</guid>
+      <description>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.</description>
     </item>
     
   </channel>
