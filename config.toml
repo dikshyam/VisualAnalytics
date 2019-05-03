@@ -1,0 +1,86 @@
+## Basic Configuration
+baseurl = "/"
+languageCode = "en"
+
+title = "Dikshya Mohanty"
+theme = "hyde-hyde"
+
+## Hugo Built-in Features
+# disqusShortname = "your-disqus-shortname"
+# googleAnalytics = "your-google-analytics-id"
+# enableRobotsTXT = true
+
+# summarylength = 30
+
+#paginate = 5
+
+## Site Settings
+[params]
+    author = "Dikshya"
+    title = "Title"
+    # description = "..."
+    authorimage = "/img/dp1.jpg"
+    dateformat = "Jan 2, 2006"
+
+    # sidebar, copyright & license
+    copyright = "htr3n"
+    license = "CC BY-SA 4.0"
+    licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
+    showBuiltWith = true
+
+    # https://highlightjs.org
+    highlightjs = true
+    highlightjsstyle = "github"
+    
+    # please choose either GraphComment or Disqus or Utterances
+    #GraphCommentId = "..."
+    #UtterancesRepo = "..." # https://utteranc.es/
+    #UtterancesIssueTerm = "..." # pathname, url, title, og:title
+    #UtterancesTheme = "..." # github-light or github-dark
+
+    # Table of contents
+    #toc = none, "hugo", or "tocbot"
+
+## Social Accounts
+[params.social]
+    github = "Dikshyam"
+    instagram = "dikshyamohanty_"
+    #xing = "<username>"
+    linkedin = "dikshya-mohanty-79b61ba3"
+    #twitter = "<username>"
+    #facebook = "dikshya94"
+    #stackoverflow = "<username>"
+    #telegram = "<username>"
+    email = "dmohanty@uncc.edu"
+    # gravatar = "your-email@example.com"
+
+## Main Menu
+[[menu.main]]
+    name = "Professional Summary"
+    identifier = "professionalsummary"
+    weight = 200
+    url = "/professionalsummary/"
+    
+[[menu.main]]
+    name = "Projects"
+    weight = 300
+    identifier = "projects"
+    url = "/projects/"
+    
+[[menu.main]]
+    name = "Education"
+    identifier = "education"
+    weight = 100
+    url = "/education/"
+ 
+[[menu.main]]
+    name = "About"
+    identifier = "about"
+    weight = 400
+    url = "/about/"
+
+[[menu.main]]
+    name = "Good Reads"
+    identifier = "posts"
+    weight = 500
+    url = "/posts/"

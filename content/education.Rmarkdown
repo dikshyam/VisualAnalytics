@@ -1,0 +1,28 @@
+---
+title: Education
+author: ''
+date: '2019-05-03'
+slug: education
+categories: []
+tags: []
+lastmod: '2019-05-03T13:05:32-04:00'
+layout: post
+type: post
+highlight: no
+---
+
+#### **University of North Carolina, Charlotte, USA**						             
+> *August 2018 - December 2019*
+
+> Masters in **Data Science and Business Analytics**
+
+> Relevant Courses: Business Intelligence, Deep Learning & Neural Networks, Big Data, Database Systems, Advanced Business Intelligence, Applied Machine Learning, Visual Analytics, Graduate Econometrics
+
+> GPA: 3.75 / 4.0
+
+#### **Indira Gandhi Institute of Technology, Odisha, India**						           
+> *August 2012 - May 2016*
+
+> Bachelor’s of Technology in **Computer Science**
+
+> GPA: 3.7 / 4.0 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Dikshya Mohanty</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Dikshya Mohanty</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 03 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hamlet</title>
+      <link>/posts/hamlet/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/hamlet/</guid>
+      <description>Prince Hamlet’s student friend, Horatio, goes to the battlements of Denmark’s Elsinore castle late at night to meet the guards. They tell him about a ghost they have seen that resembles the late king, Hamlet. It reappears and they decide to tell the prince. Hamlet’s uncle, Claudius, having become king, has now married Hamlet’s widowed mother, Gertrude.
+In the court, after envoys are sent to Norway, the prince is dissuaded from returning to university.</description>
+    </item>
+    
+    <item>
+      <title>Julius Caesar</title>
+      <link>/posts/jc/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/jc/</guid>
+      <description>The tribunes, Marullus and Flavius, break up a gathering of Roman citizens who seek to celebrate Julius Caesar’s triumphant return from war. The victory is marked by public games in which Caesar’s friend, Mark Antony, takes part. On his way to the arena Caesar is stopped by a stranger who warns that he should ‘Beware the Ides (15th) of March.’
+Fellow senators, Caius Cassius and Marcus Brutus, are suspicious of Caesar’s reactions to the power he holds in the Republic.</description>
+    </item>
+    
+    <item>
+      <title>Romeo and Juliet</title>
+      <link>/posts/rj/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/rj/</guid>
+      <description>On a hot morning fighting by young servants of the Capulet and Montague families is stopped by the Prince who tells them that the next person who breaks the peace will be punished with death.
+Capulet plans a feast to introduce his daughter, Juliet, who is almost fourteen, to the Count Paris who would like to marry her. By a mistake of the illiterate servant Peter, Montague’s son, Romeo, and his friends Benvolio and the Prince’s cousin Mercutio, hear of the party and decide to go in disguise.</description>
+    </item>
+    
+  </channel>
+</rss>

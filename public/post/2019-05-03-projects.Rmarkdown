@@ -1,0 +1,21 @@
+---
+title: Projects
+author: 'Dikshya'
+date: '2019-05-03'
+slug: projects
+categories: []
+tags: []
+lastmod: '2019-05-03T09:41:18-04:00'
+layout: post
+type: post
+highlight: no
+---
+
+## Text Analytics of Scientific literature into a causal network
+
+A semi-automatic text extraction and grouping of theoretical constructs and variables  
+(1)  Extracting performance indicators as DVs, (2) Grouping DVs by stakeholder group (and subcategories), (3) Identifying and extracting predictors, (4) Grouping predictors, (5) Linking all into a causal network using Visuals.
+
+## Irony Detection in Twitter Data
+
+The task of the project was to build a supervised Machine learning model to detect irony in tweets. Designed an Ensemble Model using Classical Machine learning Algorithms and Neural Networks, accuracy of 75%

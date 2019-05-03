@@ -1,0 +1,500 @@
+
+
+<p>Imports:</p>
+<pre class="r"><code>library(data.table)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:data.table&#39;:
+## 
+##     between, first, last</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(tidytext)
+library(ggplot2)
+library(RTextTools)</code></pre>
+<pre><code>## Loading required package: SparseM</code></pre>
+<pre><code>## 
+## Attaching package: &#39;SparseM&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     backsolve</code></pre>
+<pre class="r"><code>library(tm)</code></pre>
+<pre><code>## Loading required package: NLP</code></pre>
+<pre><code>## 
+## Attaching package: &#39;NLP&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     annotate</code></pre>
+<pre class="r"><code>library(wordcloud)</code></pre>
+<pre><code>## Loading required package: RColorBrewer</code></pre>
+<pre class="r"><code>library(topicmodels)
+library(slam)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;slam&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:data.table&#39;:
+## 
+##     rollup</code></pre>
+<pre class="r"><code>library(SnowballC)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;SnowballC&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:RTextTools&#39;:
+## 
+##     getStemLanguages, wordStem</code></pre>
+<pre class="r"><code>library(reshape2)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;reshape2&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:data.table&#39;:
+## 
+##     dcast, melt</code></pre>
+<p>Purpose: To perform text analytics including creating word clouds, perform sentiment analysis and topic modeling Description: The data for this assignment has been collected from psychcentral.com. This website offers an online forum for posting questions and answers related to mental health. Please visit <a href="https://forums.psychcentral.com" class="uri">https://forums.psychcentral.com</a> for more information. Our objective is to perform text analytics to discover useful information related to mental health.</p>
+<p>Instructions: Please follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>In Canvas, navigate to Assignments and then Assignment2</p></li>
+<li><p>Download and save the data set psychcentral_data.csv</p></li>
+<li><p>Read the file: data &lt;- fread(“psychcentral_data.csv”, sep=“,”, header=T, strip.white = T, na.strings = c(“NA”,“NaN”,“”,“?”))</p></li>
+</ol>
+<pre class="r"><code>setwd(&quot;/Volumes/GoogleDrive/My Drive/CourseWork/2 Advanced BI/&quot;)
+
+data &lt;- fread(&quot;psychcentral_data.csv&quot;, sep=&quot;,&quot;, header=T, strip.white = T, na.strings = c(&quot;NA&quot;,&quot;NaN&quot;,&quot;&quot;,&quot;?&quot;)) 
+attach(data)
+dim(data)</code></pre>
+<pre><code>## [1] 8360    4</code></pre>
+<p>3.1. (1 point) What are the column names in the data?</p>
+<p><strong>Answer: 4</strong></p>
+<p>3.2. (1 point) How many rows does this data have?</p>
+<p><strong>Answer: 8360</strong></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Use libraries “dplyr” and “tidytext” to tokenize column q_content. Then remove the stop-words. The count the number of tokens.</li>
+</ol>
+<pre class="r"><code>tidy_text &lt;- data %&gt;%
+  unnest_tokens(word, q_content)
+
+data(stop_words)
+tidy_text &lt;- tidy_text %&gt;%
+  anti_join(stop_words)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>counts &lt;- tidy_text %&gt;%
+  count(word, sort = TRUE) </code></pre>
+<p>4.1. (2 points) What are the top five tokens returned?</p>
+<p>Answer:</p>
+<pre class="r"><code>counts[1:5,]</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   word      n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 im    13012
+## 2 dont  11197
+## 3 feel   9168
+## 4 time   6697
+## 5 life   4464</code></pre>
+<p>4.2. (2 points) Use library “ggplot2” to create a visualization that shows the frequency of the tokens that appeared for at least 2000 times. (Hint: Change n in argument filter to 2000). Paste the visualization below:</p>
+<p>Answer:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  filter(n &gt; 2000) %&gt;%
+  mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(word, n)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  xlab(NULL) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>4.3. (2 points) Based on the results in 4.2., would you suggest stemming on this text? Why? Bring one example from the visualization above that shows stemming should be done on this text?</p>
+<p>Yes, Stemming should be done on this data set. In the above visualization, we notice that ‘friends’ and ‘friend’ are among the top words, where as they basically they’re the same word. Stemming would reduce ‘friends’ to ‘friend’ and hence remove any kind of such redundancy.</p>
+<p>4.4. Install “SnowballC” package using install.packages(“SnowballC”, repos = “<a href="https://cran.r-project.org" class="uri">https://cran.r-project.org</a>”). Use library “SnowballC” to stem q_content using the code below:</p>
+<pre class="r"><code>tidy_text &lt;- data %&gt;%
+  unnest_tokens(word, q_content) %&gt;%
+  mutate(word = wordStem(word)) </code></pre>
+<p>4.4.1. (2 points) Then remove the stop-words. Now what are the top five tokens after stemming?</p>
+<pre class="r"><code>data(stop_words)
+tidy_text &lt;- tidy_text %&gt;%
+  anti_join(stop_words)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>counts &lt;- tidy_text %&gt;%
+  count(word, sort = TRUE) 
+
+counts[1:5,]</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   word      n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 wa    21437
+## 2 thi   14961
+## 3 im    13016
+## 4 feel  12905
+## 5 dont  11197</code></pre>
+<p>4.4.2. (2 points) Use library “ggplot2” to create a visualization that shows the frequency of the tokens that appeared for at least 4000 times. (Hint: Change n in argument filter to 4000). Paste the visualization below:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  filter(n &gt; 4000) %&gt;%
+  mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(word, n)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  xlab(NULL) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>4.4.3. (3 points) Use library “wordcloud” to create a word cloud with the 200 most used tokens. Paste the visualization below:</p>
+<pre class="r"><code>library(wordcloud)
+
+tidy_text %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(word) %&gt;%
+  with(wordcloud(word, n, max.words = 200))</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>4.4.4. (5 points) Create a color-coded word cloud based on sentiment. Use the most frequent 100 tokens for positive and negative words. Paste the word cloud in the space below:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  inner_join(get_sentiments(&quot;bing&quot;)) %&gt;%
+  count(word, sentiment, sort = TRUE) %&gt;%
+  acast(word ~ sentiment, value.var = &quot;n&quot;, fill = 0) %&gt;%
+  comparison.cloud(colors = c(&quot;#F8766D&quot;, &quot;#00BFC4&quot;),
+                   max.words = 100)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Repeat all the steps in question 4 but this time for column answers.</li>
+</ol>
+<pre class="r"><code>tidy_text &lt;- data %&gt;%
+  unnest_tokens(word, answers)
+
+data(stop_words)
+tidy_text &lt;- tidy_text %&gt;%
+  anti_join(stop_words)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>counts &lt;- tidy_text %&gt;%
+  count(word, sort = TRUE) </code></pre>
+<p>5.1. (2 points) What are the top five tokens returned?</p>
+<pre class="r"><code>counts[1:5,]</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   word       n
+##   &lt;chr&gt;  &lt;int&gt;
+## 1 dont   18010
+## 2 feel   13279
+## 3 people 10334
+## 4 youre  10162
+## 5 time    9729</code></pre>
+<p>5.2. (2 points) Use library “ggplot2” to create a visualization that shows the frequency of the tokens that appeared for at least 4000 times. (Hint: Change n in argument filter to 4000). Paste the visualization below:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  filter(n &gt; 4000) %&gt;%
+  mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(word, n)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  xlab(NULL) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>5.3. Install “SnowballC” package using install.packages(“SnowballC”, repos = “<a href="https://cran.r-project.org" class="uri">https://cran.r-project.org</a>”). Use library “SnowballC” to stem answers using the code below:</p>
+<pre class="r"><code>#check for missing values
+sum(is.na(data$answers))</code></pre>
+<pre><code>## [1] 62</code></pre>
+<pre class="r"><code># +also dropping missing values
+tidy_text &lt;- data %&gt;%
+    unnest_tokens(word, answers) %&gt;%
+  na.omit() %&gt;%
+    mutate(word = wordStem(word)) 
+
+#check for missing values
+sum(is.na(tidy_text))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>5.3.1. (2 points) Then remove the stop-words. Now what are the top five tokens after stemming?</p>
+<pre class="r"><code>data(stop_words)
+tidy_text &lt;- tidy_text %&gt;%
+  anti_join(stop_words)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>counts &lt;- tidy_text %&gt;%
+  count(word, sort = TRUE) 
+
+counts[1:5,]</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   word      n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 thi   31762
+## 2 ar    28927
+## 3 feel  21402
+## 4 dont  17894
+## 5 wa    13958</code></pre>
+<p>5.3.2. (2 points) Use library “ggplot2” to create a visualization that shows the frequency of the tokens that appeared for at least 6000 times. (Hint: Change n in argument filter to 6000). Paste the visualization below:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  count(word, sort = TRUE) %&gt;%
+  filter(n &gt; 6000) %&gt;%
+  mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(word, n)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  xlab(NULL) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>5.3.3. (6 points) Use library “wordcloud” to create a word cloud with the 200 most used tokens. Paste the visualization below:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  anti_join(stop_words) %&gt;%
+  count(word) %&gt;%
+  with(wordcloud(word, n, max.words = 200))</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>5.3.4. (6 points) Create a color-coded word cloud based on sentiment. Use the most frequent 100 tokens for positive and negative words. Paste the word cloud in the space below:</p>
+<pre class="r"><code>tidy_text %&gt;%
+  inner_join(get_sentiments(&quot;bing&quot;)) %&gt;%
+  count(word, sentiment, sort = TRUE) %&gt;%
+  acast(word ~ sentiment, value.var = &quot;n&quot;, fill = 0) %&gt;%
+  comparison.cloud(colors = c(&quot;#F8766D&quot;, &quot;#00BFC4&quot;),
+                   max.words = 100)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<ol start="6" style="list-style-type: decimal">
+<li>Use the following code to perform topic-modeling on q_content:</li>
+</ol>
+<pre class="r"><code>data &lt;- data[1:1000,] # We perform LDA on the rows 1 through 1000 in the data.
+
+wordstoremove &lt;- c(&quot;know&quot;,&quot;like&quot;,&quot;want&quot;,&quot;dont&quot;, &quot;just&quot;,&quot;feel&quot;,&quot;get&quot;,&quot;really&quot;,&quot;get&quot;,&quot;said&quot;,&quot;time&quot;,&quot;told&quot;,&quot;can&quot;,&quot;one&quot;,&quot;now&quot;,&quot;always&quot;,&quot;ive&quot;,&quot;even&quot;)
+data_sub &lt;- as.data.frame(sapply(data, function(x) gsub(paste(wordstoremove, collapse = &#39;|&#39;), &#39;&#39;, x)))
+
+corpus &lt;- Corpus(VectorSource(data_sub$q_content), readerControl=list(language=&quot;en&quot;))
+dtm &lt;- DocumentTermMatrix(corpus, control = list(stopwords = TRUE, minWordLength = 2, removeNumbers = TRUE, removePunctuation = TRUE,  stemDocument = TRUE))
+rowTotals &lt;- apply(dtm , 1, sum) #Find the sum of words in each Document
+dtm.new   &lt;- dtm[rowTotals&gt; 0, ] #remove all docs without words
+lda &lt;- LDA(dtm.new, k = 5) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td</code></pre>
+<p>6.1. (5 points) The code above will create the beta scores for each document per topic (k = 5). Then create bar plots (similar to what we created in class) for each topic for 10 tokens (top_n(10, beta)). Paste the visualization below.</p>
+<pre class="r"><code>top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>6.2. (5 points) Based on the visualization in 6.1., what can you say about k? Would you try a larger k or a smaller k?</p>
+<pre class="r"><code>#lda &lt;- LDA(dtm.new, k = 5)
+library(ldatuning)
+tunes &lt;- FindTopicsNumber(
+   dtm.new,
+   topics = c(2:20),
+   metrics = c(&quot;Griffiths2004&quot;, &quot;CaoJuan2009&quot;, &quot;Arun2010&quot;, &quot;Deveaud2014&quot;),
+   method = &quot;Gibbs&quot;,
+   control = list(seed = 77),
+   mc.cores = 3L,
+   verbose = TRUE
+)</code></pre>
+<pre><code>## fit models... done.
+## calculate metrics:
+##   Griffiths2004... done.
+##   CaoJuan2009... done.
+##   Arun2010... done.
+##   Deveaud2014... done.</code></pre>
+<pre class="r"><code>FindTopicsNumber_plot(tunes)</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>k value should be around 6 w.r.t. all the metrics from the ldatuning package. More common words like ‘don’t’ ,‘just’, ‘like’, ‘feel’ and ‘know’ which are repetitive in all the topics, need to be removed for a better judgement.</p>
+<p>6.3. (10 points) Repeat 6.1. with the following ks: 6.3.1. K = 2. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 2) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>6.3.2. K = 3. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 3) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>6.3.3. K = 4. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 4) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>6.3.4. K = 10. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 10) # k is the number of topics to be found.
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>6.3.5. Based on the results recommend the number of topics that would be appropriate for this corpus</p>
+<p>Removing the common repetitive words has proven to be a little better as there less of them now. Looking at the models, the model with 6 topics looks to define the corpus more distinctively.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Based on the results recommend the number of topics that would be appropriate for this corpus. Use the following code to perform topic-modeling on answers:</li>
+</ol>
+<pre class="r"><code>data &lt;- data[1:1000,] # We perform LDA on the rows 1 through 1000 in the data.
+
+corpus &lt;- Corpus(VectorSource(data_sub$answers), readerControl=list(language=&quot;en&quot;))
+dtm &lt;- DocumentTermMatrix(corpus, control = list(stopwords = TRUE, minWordLength = 2, removeNumbers = TRUE, removePunctuation = TRUE,  stemDocument = TRUE))
+rowTotals &lt;- apply(dtm , 1, sum) #Find the sum of words in each Document
+dtm.new   &lt;- dtm[rowTotals&gt; 0, ] #remove all docs without words
+lda &lt;- LDA(dtm.new, k = 10) # k is the number of topics to be found.</code></pre>
+<p>7.1. (5 points) The code above will create the beta scores for each document per topic (k = 10). Then create bar plots (similar to what we created in class) for each topic for 10 tokens (top_n(10, beta)). Paste the visualization below.</p>
+<pre class="r"><code>lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>7.2. (5 points) Based on the visualization in 6.1., are the tokens in all topics similar? Then what can you say about k? Would you try a larger k or a smaller k?</p>
+<pre class="r"><code>tunes &lt;- FindTopicsNumber(
+   dtm.new,
+   topics = c(2:30),
+   metrics = c(&quot;Griffiths2004&quot;, &quot;CaoJuan2009&quot;, &quot;Arun2010&quot;, &quot;Deveaud2014&quot;),
+   method = &quot;Gibbs&quot;,
+   control = list(seed = 77),
+   mc.cores = 3L,
+   verbose = TRUE
+)</code></pre>
+<pre><code>## fit models... done.
+## calculate metrics:
+##   Griffiths2004... done.
+##   CaoJuan2009... done.
+##   Arun2010... done.
+##   Deveaud2014... done.</code></pre>
+<pre class="r"><code>FindTopicsNumber_plot(tunes)</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>7.3. (10 points) Repeat 6.1. with the following ks: 7.3.1. K = 2. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 2) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>7.3.2. K = 8. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 8) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>7.3.3. K = 11. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 11) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>7.3.4. K = 14. Paste your visualization in the space below:</p>
+<pre class="r"><code>lda &lt;- LDA(dtm.new, k = 14) # k is the number of topics to be found.
+
+
+lda_td &lt;- tidy(lda)
+#lda_td
+top_terms &lt;- lda_td %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+top_terms %&gt;%
+  mutate(term = reorder(term, beta)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip()</code></pre>
+<p><img src="Assignment2_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p>7.3.5. Based on the results recommend the number of topics that would be appropriate for this corpus.</p>
+<p>From the above analysis, I would be recommend to go with 8 topics, as it enough to explain different topics without much repetition. The topics talk about different things as we increase the k from 2 but after 8 it feels like there is less uniqueness between the topics.</p>
+<ol start="8" style="list-style-type: decimal">
+<li>(20 points) Suppose that you are a researcher who works for National Institutes of Health (NIH). You are working on a project that aims to identify the most important reasons for mental disorders. Based on your analysis above, can we propose any hypothesis about the reasons for mental disorders in the society? Please explain.</li>
+</ol>
+<p>By looking at the word clouds of the questions and the answers, it can be understood that people talk about series negative matters like death, stress, depression, addiction, breakup and a lot of positive things about love, support, trust, hung, patience. It is remarkable to see people really open in this forum talking about all kinds of things.</p>
+<p>The top topics that came out of the analysis mostly talk about time, like there is no time for sex life, no time for friends, lost relationship time, no time to spend with family. Along with-it people also talk about stuff like meeting with doctor or therapist, finding ways to stay positive and about school life.</p>
+<p>Further analysis by building better topics would give more deep and meaningful results.</p>
