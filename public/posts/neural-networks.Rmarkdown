@@ -1,0 +1,127 @@
+---
+title: "Neural Network Tutorial"
+output: html_document
+---
+An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process. Learning in biological systems involves adjustments to the synaptic connections that exist between the neurons. This is true about ANNs as well. The basic idea behind a neural network is to simulate (copy in a simplified but reasonably faithful way) lots of densely interconnected brain cells inside a computer so we can get it to learn things, recognize patterns, and make decisions in a human-like way. The amazing thing about a neural network is that we don’t have to program it to learn explicitly: it learns all by itself, just like human brain!
+
+Let's do a quick tutorial on Neural Networks:
+
+
+Importing the Library Packages needed for this code
+```{r Imports}
+library(randomForest)
+library(caret)
+library(ROCR)
+library(ggplot2)
+library(nnet)
+```
+
+
+Reading the file:  
+```{r importing data from csv}
+data <- read.csv("election_campaign_data.csv", sep=",", header=T, strip.white = T, na.strings = c("NA","NaN","","?")) 
+summary(data)
+```
+
+
+Dropping the following variables from the data: "cand_id", "last_name", "first_name", "twitterbirth", "facebookdate", "facebookjan", "youtubebirth".
+```{r}
+cols <- c("cand_id", "last_name", "first_name", "twitterbirth", "facebookdate", "facebookjan", "youtubebirth")
+data[,cols] <- list(NULL)
+summary(data)
+```
+
+Converting the following variables into factor variables using function as.factor(): “twitter”, “facebook”, “youtube”, “cand_ici”, and “gen_election”.
+```{r}
+data$twitter <- as.factor(data$twitter)
+data$facebook <- as.factor(data$facebook)
+data$youtube <- as.factor(data$youtube)
+data$cand_ici <- as.factor(data$cand_ici)
+data$gen_election <- as.factor(data$gen_election)
+summary(data)
+```
+
+Removing all of the observations with any missing values using function complete.cases()
+```{r}
+data <- data[complete.cases(data),]
+head(data)
+```
+
+Randomly assigning 70% of the observations to train_data and the remaining observations to test_data (Refer to Module 6 for the code). 
+```{r}
+set.seed(42)
+td <- sample(1:nrow(data), 0.7 * nrow(data))
+train_data <- data[td,]
+test_data <- data[setdiff(1:nrow(data), td),]
+summary(train_data)
+```
+
+Let's use library(nnet) and the code to build a neural network classifier. 
+
+Let's use 5 hidden nodes in our initial ANN. 
+```{r}
+ann <- nnet(train_data$gen_election ~ ., data=train_data, size=5, maxit=1000) 
+summary(ann)
+```
+
+Let's make a confusion matrix for test_data. Fill out the confusion matrix in below. Use “W” as the value of option positive in confusionMatrix() function.
+
+```{r}
+predicted_values <- predict(ann, test_data,type= "raw")
+pred <- factor( ifelse(predicted_values[,1] > 0.5, 'W', 'L') )
+confusionMatrix(pred, test_data$gen_election, positive = 'W')
+
+```
+
+Let's calculate AUC and create the ROC curve. 
+
+```{r}
+predicted_values <- predict(ann, test_data,type= "raw")
+pred <- prediction(predicted_values, test_data$gen_election)
+perf <- performance(pred, measure = "tpr", x.measure = "fpr")
+auc <- performance(pred, measure = "auc")
+auc <- auc@y.values[[1]]
+roc.data <- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model="ANN")
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0("ROC Curve w/ AUC=", auc))
+
+```
+
+let's make an ANN with maximum hidden nodes:
+ANN with 24 hidden nodes:
+```{r}
+ann1 <- nnet(train_data$gen_election ~ ., data=train_data, size=24, maxit=1000) 
+
+```
+
+Let's calculate AUC and create the ROC curve for the previous model. 
+
+```{r}
+predicted_values <- predict(ann1, test_data,type= "raw")
+pred <- factor( ifelse(predicted_values[,1] > 0.5, 'W', 'L') )
+confusionMatrix(pred, test_data$gen_election, positive = 'W')
+
+```
+
+
+```{r}
+predicted_values <- predict(ann1, test_data,type= "raw")
+pred <- prediction(predicted_values, test_data$gen_election)
+perf <- performance(pred, measure = "tpr", x.measure = "fpr")
+
+auc <- performance(pred, measure = "auc")
+auc <- auc@y.values[[1]]
+roc.data <- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model="ANN")
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0("ROC Curve w/ AUC=", auc))
+
+```
+

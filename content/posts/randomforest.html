@@ -1,0 +1,1021 @@
+---
+title: "Random Forest Tutorial"
+output: html_document
+---
+
+
+
+<p>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.e. continuous target variable) but it mainly performs well on classification tasks (i.e. categorical target variable). It has become a lethal weapon of modern data scientists to refine the predictive model. The best part of the algorithm is that there are very few assumptions attached to it so data preparation is less challenging which makes the use of the algorithm easier and faster. It’s listed as a top algorithm (with ensembling) in Kaggle Competitions.</p>
+<p>Let’s do a quick tutorial on Random Forests:</p>
+<p>Importing the Library Packages needed for this code</p>
+<pre class="r"><code>library(randomForest)</code></pre>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre class="r"><code>library(caret)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggplot2&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:randomForest&#39;:
+## 
+##     margin</code></pre>
+<pre class="r"><code>library(ROCR)</code></pre>
+<pre><code>## Loading required package: gplots</code></pre>
+<pre><code>## 
+## Attaching package: &#39;gplots&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     lowess</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(nnet)</code></pre>
+<p>Reading the file:</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;election_campaign_data.csv&quot;, sep=&quot;,&quot;, header=T, strip.white = T, na.strings = c(&quot;NA&quot;,&quot;NaN&quot;,&quot;&quot;,&quot;?&quot;)) 
+summary(data)</code></pre>
+<pre><code>##       cand_id      last_name     first_name   twitterbirth
+##  H0AK00089:  1   MILLER : 10   JIM    :  9   1/4/11 :  7  
+##  H0AL01048:  1   SMITH  :  9   DAVID  :  8   1/7/11 :  6  
+##  H0AL02087:  1   JOHNSON:  7   JOHN   :  7   2/2/09 :  6  
+##  H0AL03184:  1   WILSON :  7   MIKE   :  7   1/25/11:  5  
+##  H0AL05163:  1   DAVIS  :  5   MICHAEL:  6   1/6/11 :  5  
+##  H0AL05197:  1   EDWARDS:  5   ROBERT :  5   (Other):320  
+##  (Other)  :935   (Other):898   (Other):899   NA&#39;s   :592  
+##     twitter        facebookdate    facebook       facebookjan    
+##  Min.   :0.0000   1/6/11 :  4   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.0000   5/11/09:  4   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :0.0000   1/1/10 :  3   Median :0.0000   Median :0.0000  
+##  Mean   :0.2136   2/7/11 :  3   Mean   :0.2604   Mean   :0.2816  
+##  3rd Qu.:0.0000   3/11/09:  3   3rd Qu.:1.0000   3rd Qu.:1.0000  
+##  Max.   :1.0000   (Other):342   Max.   :1.0000   Max.   :1.0000  
+##                   NA&#39;s   :582                                    
+##     youtubebirth    youtube       cand_ici cand_pty_affiliation
+##  11-Jan-11:  7   Min.   :0.0000   C:452    REP    :424         
+##  12-Jan-11:  7   1st Qu.:0.0000   I:398    DEM    :389         
+##  7-Jan-11 :  7   Median :0.0000   O: 91    IND    : 42         
+##  13-Jan-11:  6   Mean   :0.2561            LIB    : 29         
+##  19-Jan-11:  6   3rd Qu.:1.0000            OTH    : 14         
+##  (Other)  :307   Max.   :1.0000            UNK    :  9         
+##  NA&#39;s     :601                             (Other): 34         
+##   ttl_receipts      trans_from_auth      ttl_disb        trans_to_auth    
+##  Min.   :       0   Min.   :      0   Min.   :       0   Min.   :      0  
+##  1st Qu.:   88848   1st Qu.:      0   1st Qu.:   86440   1st Qu.:      0  
+##  Median :  810054   Median :      0   Median :  790374   Median :      0  
+##  Mean   : 1015225   Mean   :  11405   Mean   : 1009054   Mean   :   9514  
+##  3rd Qu.: 1519582   3rd Qu.:      0   3rd Qu.: 1440465   3rd Qu.:      0  
+##  Max.   :13567811   Max.   :1491686   Max.   :11666973   Max.   :1755000  
+##                                                                           
+##     coh_bop           coh_cop         cand_contrib         cand_loans     
+##  Min.   :  -4655   Min.   : -22127   Min.   :      0.0   Min.   :      0  
+##  1st Qu.:      0   1st Qu.:    467   1st Qu.:      0.0   1st Qu.:      0  
+##  Median :     88   Median :  15431   Median :      0.0   Median :      0  
+##  Mean   : 163807   Mean   : 168553   Mean   :  12530.8   Mean   :  47610  
+##  3rd Qu.: 118604   3rd Qu.: 139546   3rd Qu.:    384.9   3rd Qu.:   6000  
+##  Max.   :3467869   Max.   :3129902   Max.   :2593364.5   Max.   :7905050  
+##                                                                           
+##   other_loans       cand_loan_repay   other_loan_repay debts_owed_by    
+##  Min.   :     0.0   Min.   :      0   Min.   :     0   Min.   :      0  
+##  1st Qu.:     0.0   1st Qu.:      0   1st Qu.:     0   1st Qu.:      0  
+##  Median :     0.0   Median :      0   Median :     0   Median :      0  
+##  Mean   :   586.1   Mean   :  18884   Mean   :   559   Mean   :  47423  
+##  3rd Qu.:     0.0   3rd Qu.:      0   3rd Qu.:     0   3rd Qu.:  20000  
+##  Max.   :150000.0   Max.   :6175000   Max.   :170800   Max.   :2265000  
+##                                                                         
+##  ttl_indiv_contrib  other_pol_cmte_contrib pol_pty_contrib
+##  Min.   :       0   Min.   :      0        Min.   :    0  
+##  1st Qu.:   54974   1st Qu.:   1000        1st Qu.:    0  
+##  Median :  414189   Median : 233579        Median :  190  
+##  Mean   :  589384   Mean   : 339343        Mean   : 2480  
+##  3rd Qu.:  830829   3rd Qu.: 522514        3rd Qu.: 2912  
+##  Max.   :12959903   Max.   :2857030        Max.   :59030  
+##                                                           
+##  indiv_refunds     cmte_refunds         opp_fund             age       
+##  Min.   : -1300   Min.   :-26000.0   Min.   :       0   Min.   :28.00  
+##  1st Qu.:     0   1st Qu.:     0.0   1st Qu.:  189377   1st Qu.:50.00  
+##  Median :   305   Median :     0.0   Median : 1030436   Median :58.00  
+##  Mean   :  3246   Mean   :   948.8   Mean   : 1321742   Mean   :57.28  
+##  3rd Qu.:  3200   3rd Qu.:   500.0   3rd Qu.: 1845156   3rd Qu.:64.00  
+##  Max.   :306050   Max.   : 28000.0   Max.   :18292250   Max.   :86.00  
+##                                                         NA&#39;s   :12     
+##   gender    gen_election
+##  F   :156   L:501       
+##  M   :773   W:440       
+##  NA&#39;s: 12               
+##                         
+##                         
+##                         
+## </code></pre>
+<p>Dropping the following variables from the data: “cand_id”, “last_name”, “first_name”, “twitterbirth”, “facebookdate”, “facebookjan”, “youtubebirth”.</p>
+<pre class="r"><code>cols &lt;- c(&quot;cand_id&quot;, &quot;last_name&quot;, &quot;first_name&quot;, &quot;twitterbirth&quot;, &quot;facebookdate&quot;, &quot;facebookjan&quot;, &quot;youtubebirth&quot;)
+data[,cols] &lt;- list(NULL)
+summary(data)</code></pre>
+<pre><code>##     twitter          facebook         youtube       cand_ici
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   C:452   
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   I:398   
+##  Median :0.0000   Median :0.0000   Median :0.0000   O: 91   
+##  Mean   :0.2136   Mean   :0.2604   Mean   :0.2561           
+##  3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:1.0000           
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000           
+##                                                             
+##  cand_pty_affiliation  ttl_receipts      trans_from_auth  
+##  REP    :424          Min.   :       0   Min.   :      0  
+##  DEM    :389          1st Qu.:   88848   1st Qu.:      0  
+##  IND    : 42          Median :  810054   Median :      0  
+##  LIB    : 29          Mean   : 1015225   Mean   :  11405  
+##  OTH    : 14          3rd Qu.: 1519582   3rd Qu.:      0  
+##  UNK    :  9          Max.   :13567811   Max.   :1491686  
+##  (Other): 34                                              
+##     ttl_disb        trans_to_auth        coh_bop           coh_cop       
+##  Min.   :       0   Min.   :      0   Min.   :  -4655   Min.   : -22127  
+##  1st Qu.:   86440   1st Qu.:      0   1st Qu.:      0   1st Qu.:    467  
+##  Median :  790374   Median :      0   Median :     88   Median :  15431  
+##  Mean   : 1009054   Mean   :   9514   Mean   : 163807   Mean   : 168553  
+##  3rd Qu.: 1440465   3rd Qu.:      0   3rd Qu.: 118604   3rd Qu.: 139546  
+##  Max.   :11666973   Max.   :1755000   Max.   :3467869   Max.   :3129902  
+##                                                                          
+##   cand_contrib         cand_loans       other_loans      
+##  Min.   :      0.0   Min.   :      0   Min.   :     0.0  
+##  1st Qu.:      0.0   1st Qu.:      0   1st Qu.:     0.0  
+##  Median :      0.0   Median :      0   Median :     0.0  
+##  Mean   :  12530.8   Mean   :  47610   Mean   :   586.1  
+##  3rd Qu.:    384.9   3rd Qu.:   6000   3rd Qu.:     0.0  
+##  Max.   :2593364.5   Max.   :7905050   Max.   :150000.0  
+##                                                          
+##  cand_loan_repay   other_loan_repay debts_owed_by     ttl_indiv_contrib 
+##  Min.   :      0   Min.   :     0   Min.   :      0   Min.   :       0  
+##  1st Qu.:      0   1st Qu.:     0   1st Qu.:      0   1st Qu.:   54974  
+##  Median :      0   Median :     0   Median :      0   Median :  414189  
+##  Mean   :  18884   Mean   :   559   Mean   :  47423   Mean   :  589384  
+##  3rd Qu.:      0   3rd Qu.:     0   3rd Qu.:  20000   3rd Qu.:  830829  
+##  Max.   :6175000   Max.   :170800   Max.   :2265000   Max.   :12959903  
+##                                                                         
+##  other_pol_cmte_contrib pol_pty_contrib indiv_refunds   
+##  Min.   :      0        Min.   :    0   Min.   : -1300  
+##  1st Qu.:   1000        1st Qu.:    0   1st Qu.:     0  
+##  Median : 233579        Median :  190   Median :   305  
+##  Mean   : 339343        Mean   : 2480   Mean   :  3246  
+##  3rd Qu.: 522514        3rd Qu.: 2912   3rd Qu.:  3200  
+##  Max.   :2857030        Max.   :59030   Max.   :306050  
+##                                                         
+##   cmte_refunds         opp_fund             age         gender   
+##  Min.   :-26000.0   Min.   :       0   Min.   :28.00   F   :156  
+##  1st Qu.:     0.0   1st Qu.:  189377   1st Qu.:50.00   M   :773  
+##  Median :     0.0   Median : 1030436   Median :58.00   NA&#39;s: 12  
+##  Mean   :   948.8   Mean   : 1321742   Mean   :57.28             
+##  3rd Qu.:   500.0   3rd Qu.: 1845156   3rd Qu.:64.00             
+##  Max.   : 28000.0   Max.   :18292250   Max.   :86.00             
+##                                        NA&#39;s   :12                
+##  gen_election
+##  L:501       
+##  W:440       
+##              
+##              
+##              
+##              
+## </code></pre>
+<p>Converting the following variables into factor variables using function as.factor(): “twitter”, “facebook”, “youtube”, “cand_ici”, and “gen_election”.</p>
+<pre class="r"><code>data$twitter &lt;- as.factor(data$twitter)
+data$facebook &lt;- as.factor(data$facebook)
+data$youtube &lt;- as.factor(data$youtube)
+data$cand_ici &lt;- as.factor(data$cand_ici)
+data$gen_election &lt;- as.factor(data$gen_election)
+summary(data)</code></pre>
+<pre><code>##  twitter facebook youtube cand_ici cand_pty_affiliation  ttl_receipts     
+##  0:740   0:696    0:700   C:452    REP    :424          Min.   :       0  
+##  1:201   1:245    1:241   I:398    DEM    :389          1st Qu.:   88848  
+##                           O: 91    IND    : 42          Median :  810054  
+##                                    LIB    : 29          Mean   : 1015225  
+##                                    OTH    : 14          3rd Qu.: 1519582  
+##                                    UNK    :  9          Max.   :13567811  
+##                                    (Other): 34                            
+##  trans_from_auth      ttl_disb        trans_to_auth        coh_bop       
+##  Min.   :      0   Min.   :       0   Min.   :      0   Min.   :  -4655  
+##  1st Qu.:      0   1st Qu.:   86440   1st Qu.:      0   1st Qu.:      0  
+##  Median :      0   Median :  790374   Median :      0   Median :     88  
+##  Mean   :  11405   Mean   : 1009054   Mean   :   9514   Mean   : 163807  
+##  3rd Qu.:      0   3rd Qu.: 1440465   3rd Qu.:      0   3rd Qu.: 118604  
+##  Max.   :1491686   Max.   :11666973   Max.   :1755000   Max.   :3467869  
+##                                                                          
+##     coh_cop         cand_contrib         cand_loans     
+##  Min.   : -22127   Min.   :      0.0   Min.   :      0  
+##  1st Qu.:    467   1st Qu.:      0.0   1st Qu.:      0  
+##  Median :  15431   Median :      0.0   Median :      0  
+##  Mean   : 168553   Mean   :  12530.8   Mean   :  47610  
+##  3rd Qu.: 139546   3rd Qu.:    384.9   3rd Qu.:   6000  
+##  Max.   :3129902   Max.   :2593364.5   Max.   :7905050  
+##                                                         
+##   other_loans       cand_loan_repay   other_loan_repay debts_owed_by    
+##  Min.   :     0.0   Min.   :      0   Min.   :     0   Min.   :      0  
+##  1st Qu.:     0.0   1st Qu.:      0   1st Qu.:     0   1st Qu.:      0  
+##  Median :     0.0   Median :      0   Median :     0   Median :      0  
+##  Mean   :   586.1   Mean   :  18884   Mean   :   559   Mean   :  47423  
+##  3rd Qu.:     0.0   3rd Qu.:      0   3rd Qu.:     0   3rd Qu.:  20000  
+##  Max.   :150000.0   Max.   :6175000   Max.   :170800   Max.   :2265000  
+##                                                                         
+##  ttl_indiv_contrib  other_pol_cmte_contrib pol_pty_contrib
+##  Min.   :       0   Min.   :      0        Min.   :    0  
+##  1st Qu.:   54974   1st Qu.:   1000        1st Qu.:    0  
+##  Median :  414189   Median : 233579        Median :  190  
+##  Mean   :  589384   Mean   : 339343        Mean   : 2480  
+##  3rd Qu.:  830829   3rd Qu.: 522514        3rd Qu.: 2912  
+##  Max.   :12959903   Max.   :2857030        Max.   :59030  
+##                                                           
+##  indiv_refunds     cmte_refunds         opp_fund             age       
+##  Min.   : -1300   Min.   :-26000.0   Min.   :       0   Min.   :28.00  
+##  1st Qu.:     0   1st Qu.:     0.0   1st Qu.:  189377   1st Qu.:50.00  
+##  Median :   305   Median :     0.0   Median : 1030436   Median :58.00  
+##  Mean   :  3246   Mean   :   948.8   Mean   : 1321742   Mean   :57.28  
+##  3rd Qu.:  3200   3rd Qu.:   500.0   3rd Qu.: 1845156   3rd Qu.:64.00  
+##  Max.   :306050   Max.   : 28000.0   Max.   :18292250   Max.   :86.00  
+##                                                         NA&#39;s   :12     
+##   gender    gen_election
+##  F   :156   L:501       
+##  M   :773   W:440       
+##  NA&#39;s: 12               
+##                         
+##                         
+##                         
+## </code></pre>
+<div id="remove-all-of-the-observations-with-any-missing-values-using-function-complete.cases" class="section level4">
+<h4>7. Remove all of the observations with any missing values using function complete.cases()</h4>
+<pre class="r"><code>data &lt;- data[complete.cases(data),]
+head(data)</code></pre>
+<pre><code>##   twitter facebook youtube cand_ici cand_pty_affiliation ttl_receipts
+## 1       0        0       0        C                  DEM     48278.52
+## 2       0        0       0        C                  GRE       445.00
+## 3       0        0       0        C                  REP    446468.16
+## 4       0        0       0        C                  REP     87768.00
+## 5       0        1       0        C                  DEM    240439.23
+## 6       0        0       0        C                  DEM    239084.08
+##   trans_from_auth  ttl_disb trans_to_auth coh_bop   coh_cop cand_contrib
+## 1               0  48418.03             0  131.53     -7.98      5956.62
+## 2               0    249.00             0  138.00    277.00         0.00
+## 3               0 442922.50             0    0.00   7120.68      6872.53
+## 4               0  83938.88             0  754.67 -12456.34      3330.00
+## 5               0 235571.44             0    0.00   4867.81      5832.41
+## 6               0 235849.91             0    0.00   2707.84         0.00
+##   cand_loans other_loans cand_loan_repay other_loan_repay debts_owed_by
+## 1    9133.73           0         5558.25                0       3575.48
+## 2       0.00           0            0.00                0          0.00
+## 3   35000.00           0            0.00                0      45000.00
+## 4       0.00           0            0.00                0          0.00
+## 5       0.00           0            0.00                0       5000.00
+## 6       0.00           0            0.00                0         49.54
+##   ttl_indiv_contrib other_pol_cmte_contrib pol_pty_contrib indiv_refunds
+## 1           25583.2                6934.75          500.00             0
+## 2             445.0                   0.00            0.00             0
+## 3          373778.6               29417.01         1400.00           200
+## 4           84338.0                 100.00            0.00             0
+## 5          214136.6               14200.00         1749.99           850
+## 6          198615.7               34700.00         5000.00           350
+##   cmte_refunds  opp_fund age gender gen_election
+## 1            0  688155.1  75      M            L
+## 2            0 1398240.4  60      M            L
+## 3            0 1312116.6  64      M            L
+## 4            0  609897.9  69      M            L
+## 5          500 1001015.4  76      M            L
+## 6            0 1205985.1  66      M            L</code></pre>
+</div>
+<div id="randomly-assign-70-of-the-observations-to-train_data-and-the-remaining-observations-to-test_data-refer-to-module-6-for-the-code." class="section level4">
+<h4>8. Randomly assign 70% of the observations to train_data and the remaining observations to test_data (Refer to Module 6 for the code).</h4>
+<pre class="r"><code>set.seed(42)
+td &lt;- sample(1:nrow(data), 0.7 * nrow(data))
+train_data &lt;- data[td,]
+test_data &lt;- data[setdiff(1:nrow(data), td),]
+summary(train_data)</code></pre>
+<pre><code>##  twitter facebook youtube cand_ici cand_pty_affiliation  ttl_receipts    
+##  0:510   0:488    0:487   C:315    REP    :285          Min.   :      0  
+##  1:140   1:162    1:163   I:274    DEM    :281          1st Qu.: 112319  
+##                           O: 61    IND    : 29          Median : 831758  
+##                                    LIB    : 19          Mean   :1031133  
+##                                    OTH    :  9          3rd Qu.:1515004  
+##                                    UNK    :  8          Max.   :9796947  
+##                                    (Other): 19                           
+##  trans_from_auth      ttl_disb       trans_to_auth        coh_bop         
+##  Min.   :      0   Min.   :      0   Min.   :      0   Min.   :  -4654.9  
+##  1st Qu.:      0   1st Qu.: 107547   1st Qu.:      0   1st Qu.:      0.0  
+##  Median :      0   Median : 794593   Median :      0   Median :     79.4  
+##  Mean   :  13292   Mean   :1031544   Mean   :  10321   Mean   : 153863.4  
+##  3rd Qu.:      0   3rd Qu.:1513268   3rd Qu.:      0   3rd Qu.: 109785.2  
+##  Max.   :1491686   Max.   :9876911   Max.   :1755000   Max.   :2765078.3  
+##                                                                           
+##     coh_cop           cand_contrib         cand_loans     
+##  Min.   : -22127.1   Min.   :      0.0   Min.   :      0  
+##  1st Qu.:    598.6   1st Qu.:      0.0   1st Qu.:      0  
+##  Median :  16136.0   Median :      0.0   Median :      0  
+##  Mean   : 151479.0   Mean   :  10261.5   Mean   :  48717  
+##  3rd Qu.: 127977.5   3rd Qu.:    490.8   3rd Qu.:   5903  
+##  Max.   :3018532.8   Max.   :1934033.9   Max.   :7905050  
+##                                                           
+##   other_loans      cand_loan_repay   other_loan_repay  debts_owed_by    
+##  Min.   :    0.0   Min.   :      0   Min.   :    0.0   Min.   :      0  
+##  1st Qu.:    0.0   1st Qu.:      0   1st Qu.:    0.0   1st Qu.:      0  
+##  Median :    0.0   Median :      0   Median :    0.0   Median :      0  
+##  Mean   :  405.6   Mean   :  21527   Mean   :  134.3   Mean   :  47514  
+##  3rd Qu.:    0.0   3rd Qu.:      0   3rd Qu.:    0.0   3rd Qu.:  24503  
+##  Max.   :50000.0   Max.   :6175000   Max.   :23500.0   Max.   :1741412  
+##                                                                         
+##  ttl_indiv_contrib other_pol_cmte_contrib pol_pty_contrib  
+##  Min.   :      0   Min.   :      0        Min.   :    0.0  
+##  1st Qu.:  55410   1st Qu.:   1175        1st Qu.:    0.0  
+##  Median : 412793   Median : 239236        Median :  222.8  
+##  Mean   : 603630   Mean   : 340183        Mean   : 2565.6  
+##  3rd Qu.: 856388   3rd Qu.: 524059        3rd Qu.: 3000.0  
+##  Max.   :6248913   Max.   :2857030        Max.   :41076.2  
+##                                                            
+##  indiv_refunds    cmte_refunds         opp_fund             age       
+##  Min.   : -615   Min.   :-26000.0   Min.   :       0   Min.   :28.00  
+##  1st Qu.:    0   1st Qu.:     0.0   1st Qu.:  189557   1st Qu.:50.00  
+##  Median :  400   Median :     0.0   Median : 1071729   Median :58.00  
+##  Mean   : 3047   Mean   :   954.8   Mean   : 1298354   Mean   :57.37  
+##  3rd Qu.: 3430   3rd Qu.:   500.0   3rd Qu.: 1905370   3rd Qu.:64.00  
+##  Max.   :60570   Max.   : 28000.0   Max.   :13572720   Max.   :86.00  
+##                                                                       
+##  gender  gen_election
+##  F:108   L:347       
+##  M:542   W:303       
+##                      
+##                      
+##                      
+##                      
+## </code></pre>
+</div>
+<div id="use-train_data-to-build-a-random-forest-classifier-with-10-trees.-use-libraryrandomforest." class="section level4">
+<h4>9. Use train_data to build a random forest classifier with 10 trees. Use library(randomForest).</h4>
+<pre class="r"><code>set.seed(42)
+rf &lt;-randomForest(train_data$gen_election~., data=train_data, ntree=10, na.action=na.exclude, importance=T,
+                  proximity=F) 
+print(rf)</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = train_data$gen_election ~ ., data = train_data,      ntree = 10, importance = T, proximity = F, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 10
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 9.56%
+## Confusion matrix:
+##     L   W class.error
+## L 310  29  0.08554572
+## W  32 267  0.10702341</code></pre>
+<div id="points-what-is-the-oob-estimate-of-error-rate" class="section level6">
+<h6>9.1. (2 points) What is the OOB estimate of error rate?</h6>
+<p>OOB estimate of error rate: 9.56%</p>
+</div>
+<div id="points-how-many-variables-r-tried-at-each-split" class="section level6">
+<h6>9.2. (2 points) How many variables R tried at each split?</h6>
+<p>No. of variables tried at each split: 5</p>
+</div>
+<div id="points-now-use-20-trees." class="section level6">
+<h6>9.3. (4 points) Now use 20 trees.</h6>
+<pre class="r"><code>set.seed(42)
+rf &lt;-randomForest(gen_election~., data=train_data, ntree=20, na.action=na.exclude, importance=T,
+                  proximity=F) 
+print(rf)</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = 20,      importance = T, proximity = F, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 20
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 7.54%
+## Confusion matrix:
+##     L   W class.error
+## L 320  27  0.07780980
+## W  22 281  0.07260726</code></pre>
+</div>
+<div id="what-is-oob-estimate-of-error-rate" class="section level6">
+<h6>9.3.1. What is OOB estimate of error rate?</h6>
+<p>OOB estimate of error rate: 7.54%</p>
+</div>
+<div id="how-many-variables-r-tried-at-each-split" class="section level6">
+<h6>9.3.2. How many variables R tried at each split?</h6>
+<p>No. of variables tried at each split: 5</p>
+</div>
+<div id="points-now-use-30-trees." class="section level5">
+<h5>9.4. (4 points) Now use 30 trees.</h5>
+<pre class="r"><code>set.seed(42)
+rf &lt;-randomForest(gen_election~., data=train_data, ntree=30, na.action=na.exclude, importance=T,
+                  proximity=F) 
+print(rf)</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = 30,      importance = T, proximity = F, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 30
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 7.08%
+## Confusion matrix:
+##     L   W class.error
+## L 321  26  0.07492795
+## W  20 283  0.06600660</code></pre>
+<div id="what-is-oob-estimate-of-error-rate-1" class="section level6">
+<h6>9.4.1. What is OOB estimate of error rate?</h6>
+<p>OOB estimate of error rate: 7.08%</p>
+</div>
+<div id="how-many-variables-r-tried-at-each-split-1" class="section level6">
+<h6>9.4.2. How many variables R tried at each split?</h6>
+<p>No. of variables tried at each split: 5</p>
+</div>
+</div>
+</div>
+<div id="points-increase-the-number-of-trees-in-10-increments-e.g.40-50-.-using-oob-error-rate-to-evaluate-your-random-forest-classifier-how-many-trees-would-you-recommend" class="section level4">
+<h4>9.5. (2 points) Increase the number of trees in 10 increments (e.g. 40, 50, …). Using OOB error rate to evaluate your random forest classifier, how many trees would you recommend?</h4>
+<pre class="r"><code>for(ntree in 10*c(1:15)) {
+  set.seed(42)
+  rf = randomForest(gen_election~., data=train_data, ntree=ntree, na.action=na.exclude, importance=T, proximity=F, metric=&#39;Accuracy&#39;)
+  print(rf)
+}</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 10
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 9.56%
+## Confusion matrix:
+##     L   W class.error
+## L 310  29  0.08554572
+## W  32 267  0.10702341
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 20
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 7.54%
+## Confusion matrix:
+##     L   W class.error
+## L 320  27  0.07780980
+## W  22 281  0.07260726
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 30
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 7.08%
+## Confusion matrix:
+##     L   W class.error
+## L 321  26  0.07492795
+## W  20 283  0.06600660
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 40
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.62%
+## Confusion matrix:
+##     L   W class.error
+## L 324  23  0.06628242
+## W  20 283  0.06600660
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 50
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.46%
+## Confusion matrix:
+##     L   W class.error
+## L 324  23  0.06628242
+## W  19 284  0.06270627
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 60
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.15%
+## Confusion matrix:
+##     L   W class.error
+## L 323  24  0.06916427
+## W  16 287  0.05280528
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 70
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 5.69%
+## Confusion matrix:
+##     L   W class.error
+## L 325  22  0.06340058
+## W  15 288  0.04950495
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 80
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.31%
+## Confusion matrix:
+##     L   W class.error
+## L 322  25  0.07204611
+## W  16 287  0.05280528
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 90
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.92%
+## Confusion matrix:
+##     L   W class.error
+## L 320  27  0.07780980
+## W  18 285  0.05940594
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 100
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.31%
+## Confusion matrix:
+##     L   W class.error
+## L 324  23  0.06628242
+## W  18 285  0.05940594
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 110
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.62%
+## Confusion matrix:
+##     L   W class.error
+## L 323  24  0.06916427
+## W  19 284  0.06270627
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 120
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.62%
+## Confusion matrix:
+##     L   W class.error
+## L 323  24  0.06916427
+## W  19 284  0.06270627
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 130
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.62%
+## Confusion matrix:
+##     L   W class.error
+## L 322  25  0.07204611
+## W  18 285  0.05940594
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 140
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.31%
+## Confusion matrix:
+##     L   W class.error
+## L 322  25  0.07204611
+## W  16 287  0.05280528
+## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 150
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.15%
+## Confusion matrix:
+##     L   W class.error
+## L 323  24  0.06916427
+## W  16 287  0.05280528</code></pre>
+<p>No. of trees = 70</p>
+<pre class="r"><code>#OOB estimate of error rate at 60 trees: 6.15%
+#OOB estimate of  error rate at 70 trees: 5.69%
+#OOB estimate of error rate at 80 trees: 6.31%
+#OOB estimate of error rate at 90 trees: 6.92%
+#OOB estimate of error rate at 100 trees: 6.31%</code></pre>
+<div id="points-use-tunerf-function-to-find-the-best-value-for-mtry.-here-is-the-code-mtry---tunerftrain_data-26-train_datagen_election-ntreetryn-stepfactor1.5-improve0.01-tracetrue-plottrue-na.actionna.exclude.-replace-n-with-the-number-of-trees-you-recommended-in-9.5.-what-is-the-recommended-value-for-mtry" class="section level6">
+<h6>9.6. (2 points) Use tuneRF() function to find the best value for mtry. Here is the code: mtry &lt;- tuneRF(train_data[-26], train_data$gen_election, ntreeTry=n, stepFactor=1.5, improve=0.01, trace=TRUE, plot=TRUE, , na.action=na.exclude). Replace n with the number of trees you recommended in 9.5. What is the recommended value for mtry?</h6>
+<pre class="r"><code>set.seed(42)
+mtry &lt;- tuneRF(train_data[-26], train_data$gen_election, ntreeTry=70,  stepFactor=1.5, improve=0.01, trace=TRUE, plot=TRUE,na.action=na.exclude)</code></pre>
+<pre><code>## mtry = 5  OOB error = 6.15% 
+## Searching left ...
+## mtry = 4     OOB error = 6% 
+## 0.025 0.01 
+## mtry = 3     OOB error = 6.77% 
+## -0.1282051 0.01 
+## Searching right ...
+## mtry = 7     OOB error = 6.46% 
+## -0.07692308 0.01</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Value for mtry = 4</p>
+<pre class="r"><code>set.seed(42)
+finalrf = randomForest(gen_election~., data=train_data, ntree=70, mtry=4, na.action=na.exclude, importance=T, proximity=F)
+print(rf)</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = gen_election ~ ., data = train_data, ntree = ntree,      importance = T, proximity = F, metric = &quot;Accuracy&quot;, na.action = na.exclude) 
+##                Type of random forest: classification
+##                      Number of trees: 150
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 6.15%
+## Confusion matrix:
+##     L   W class.error
+## L 323  24  0.06916427
+## W  16 287  0.05280528</code></pre>
+</div>
+<div id="points-use-your-recommended-number-of-trees-and-mtry-value-to-build-a-new-random-forest-classifier-using-train_data.-what-is-oob-estimate-of-error-rate" class="section level6">
+<h6>9.7. (2 points) Use your recommended number of trees and mtry value to build a new random forest classifier using train_data. What is OOB estimate of error rate?</h6>
+<p>OOB estimate of error rate: 6.15%</p>
+</div>
+<div id="use-librarycaret-and-the-code-in-module-6-to-create-the-confusion-matrix-for-test_data.-fill-out-the-confusion-matrix-in-below.-use-w-as-the-value-of-option-positive-in-confusionmatrix-function." class="section level6">
+<h6>9.8 Use library(caret) and the code in Module 6 to create the confusion matrix for test_data. Fill out the confusion matrix in below. Use “W” as the value of option positive in confusionMatrix() function.</h6>
+<pre class="r"><code>set.seed(42)
+predicted_values &lt;- predict(rf, test_data)
+confusionMatrix(predicted_values, test_data$gen_election, positive = &#39;W&#39;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   L   W
+##          L 134   8
+##          W  13 124
+##                                           
+##                Accuracy : 0.9247          
+##                  95% CI : (0.8872, 0.9528)
+##     No Information Rate : 0.5269          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.8493          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.3827          
+##                                           
+##             Sensitivity : 0.9394          
+##             Specificity : 0.9116          
+##          Pos Pred Value : 0.9051          
+##          Neg Pred Value : 0.9437          
+##              Prevalence : 0.4731          
+##          Detection Rate : 0.4444          
+##    Detection Prevalence : 0.4910          
+##       Balanced Accuracy : 0.9255          
+##                                           
+##        &#39;Positive&#39; Class : W               
+## </code></pre>
+</div>
+<div id="what-is-the-value-of-accuracy" class="section level6">
+<h6>9.8.1. What is the value of accuracy?</h6>
+<p>Accuracy : 0.92</p>
+</div>
+<div id="what-is-the-value-of-tpr" class="section level6">
+<h6>9.8.2. What is the value of TPR?</h6>
+<p>Sensitivity : 0.9394</p>
+</div>
+<div id="what-is-the-value-of-fpr" class="section level6">
+<h6>9.8.3. What is the value of FPR?</h6>
+<p>1 - 0.9116 = 0.0884</p>
+</div>
+<div id="use-the-code-in-module-6-to-calculate-auc-and-create-the-roc-curve." class="section level5">
+<h5>Use the code in Module 6 to calculate AUC and create the ROC curve.</h5>
+<div id="what-is-the-value-of-auc" class="section level6">
+<h6>9.9.1. What is the value of AUC?</h6>
+<p>AUC = 0.9845</p>
+</div>
+<div id="paste-the-roc-curve-in-the-space-below" class="section level6">
+<h6>9.9.2. Paste the ROC curve in the space below:</h6>
+<pre class="r"><code>set.seed(42)
+predicted_values &lt;- predict(rf, test_data,type= &quot;prob&quot;)[,2]
+pred &lt;- prediction(predicted_values, test_data$gen_election)
+perf &lt;- performance(pred, measure = &quot;tpr&quot;, x.measure = &quot;fpr&quot;)
+auc &lt;- performance(pred, measure = &quot;auc&quot;)
+auc &lt;- auc@y.values[[1]]
+
+roc.data &lt;- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model=&quot;RF&quot;)
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+</div>
+<div id="points-use-varimpplot-to-create-the-plot-for-variable-importance.-what-are-the-type-five-important-variables-when-we-use-meandecreaseaccuracy" class="section level5">
+<h5>9.10. (4 points) Use varImpPlot() to create the plot for variable importance. What are the type five important variables when we use MeanDecreaseAccuracy?</h5>
+<p>Opp_fund, other_pol_cmte_contrib, facebook, coh_cop, cand_pty_affiliation</p>
+<pre class="r"><code>varImpPlot(rf)</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+</div>
+<div id="use-librarynnet-and-the-code-in-module-6-to-build-a-neural-network-classifier." class="section level4">
+<h4>10. Use library(nnet) and the code in Module 6 to build a neural network classifier.</h4>
+<div id="points-use-5-hidden-nodes-in-your-ann." class="section level5">
+<h5>10.1. (20 points) Use 5 hidden nodes in your ANN.</h5>
+<pre class="r"><code>ann &lt;- nnet(train_data$gen_election ~ ., data=train_data, size=5, maxit=1000) </code></pre>
+<pre><code>## # weights:  206
+## initial  value 479.957636 
+## iter  10 value 191.726584
+## iter  20 value 191.431281
+## final  value 191.430165 
+## converged</code></pre>
+<pre class="r"><code>summary(ann)</code></pre>
+<pre><code>## a 39-5-1 network with 206 weights
+## options were - entropy fitting 
+##   b-&gt;h1  i1-&gt;h1  i2-&gt;h1  i3-&gt;h1  i4-&gt;h1  i5-&gt;h1  i6-&gt;h1  i7-&gt;h1  i8-&gt;h1 
+##    0.58    0.61   -0.30    0.46    0.20    0.03    0.33   -0.51    0.22 
+##  i9-&gt;h1 i10-&gt;h1 i11-&gt;h1 i12-&gt;h1 i13-&gt;h1 i14-&gt;h1 i15-&gt;h1 i16-&gt;h1 i17-&gt;h1 
+##    0.29   -0.06    0.31    0.61   -0.34   -0.05    0.62    0.67   -0.54 
+## i18-&gt;h1 i19-&gt;h1 i20-&gt;h1 i21-&gt;h1 i22-&gt;h1 i23-&gt;h1 i24-&gt;h1 i25-&gt;h1 i26-&gt;h1 
+##   -0.04    0.08    0.57   -0.51    0.68    0.63   -0.58    0.02   -0.15 
+## i27-&gt;h1 i28-&gt;h1 i29-&gt;h1 i30-&gt;h1 i31-&gt;h1 i32-&gt;h1 i33-&gt;h1 i34-&gt;h1 i35-&gt;h1 
+##    0.57   -0.07    0.47    0.33    0.44   -0.16    0.26   -0.69    0.47 
+## i36-&gt;h1 i37-&gt;h1 i38-&gt;h1 i39-&gt;h1 
+##   -0.69   -0.41    0.57    0.16 
+##   b-&gt;h2  i1-&gt;h2  i2-&gt;h2  i3-&gt;h2  i4-&gt;h2  i5-&gt;h2  i6-&gt;h2  i7-&gt;h2  i8-&gt;h2 
+##   -0.17   -0.09   -0.65    0.66   -0.10    0.64    0.54    0.20    0.66 
+##  i9-&gt;h2 i10-&gt;h2 i11-&gt;h2 i12-&gt;h2 i13-&gt;h2 i14-&gt;h2 i15-&gt;h2 i16-&gt;h2 i17-&gt;h2 
+##    0.17   -0.23   -0.21   -0.14    0.40   -0.65    0.35    0.25   -0.46 
+## i18-&gt;h2 i19-&gt;h2 i20-&gt;h2 i21-&gt;h2 i22-&gt;h2 i23-&gt;h2 i24-&gt;h2 i25-&gt;h2 i26-&gt;h2 
+##   -0.33    0.02    0.25    0.68    0.36    0.09    0.49   -0.43   -0.32 
+## i27-&gt;h2 i28-&gt;h2 i29-&gt;h2 i30-&gt;h2 i31-&gt;h2 i32-&gt;h2 i33-&gt;h2 i34-&gt;h2 i35-&gt;h2 
+##    0.46    0.27   -0.36   -0.64   -0.50   -0.40   -0.03   -0.42    0.31 
+## i36-&gt;h2 i37-&gt;h2 i38-&gt;h2 i39-&gt;h2 
+##   -0.69   -0.17    0.02   -0.70 
+##   b-&gt;h3  i1-&gt;h3  i2-&gt;h3  i3-&gt;h3  i4-&gt;h3  i5-&gt;h3  i6-&gt;h3  i7-&gt;h3  i8-&gt;h3 
+##    0.11   -0.48   -0.20    0.20    0.39    0.09   -0.37   -0.57   -0.58 
+##  i9-&gt;h3 i10-&gt;h3 i11-&gt;h3 i12-&gt;h3 i13-&gt;h3 i14-&gt;h3 i15-&gt;h3 i16-&gt;h3 i17-&gt;h3 
+##   -0.27    0.23   -0.70   -0.41    0.61    0.60    0.33   -0.23    0.02 
+## i18-&gt;h3 i19-&gt;h3 i20-&gt;h3 i21-&gt;h3 i22-&gt;h3 i23-&gt;h3 i24-&gt;h3 i25-&gt;h3 i26-&gt;h3 
+##    0.34    0.17    0.18   -0.40   -0.40   -0.16    0.62    0.65    0.34 
+## i27-&gt;h3 i28-&gt;h3 i29-&gt;h3 i30-&gt;h3 i31-&gt;h3 i32-&gt;h3 i33-&gt;h3 i34-&gt;h3 i35-&gt;h3 
+##    0.33    0.05   -0.70    0.15    0.47    0.35   -0.07    0.05    0.05 
+## i36-&gt;h3 i37-&gt;h3 i38-&gt;h3 i39-&gt;h3 
+##   -0.70   -0.20    0.16    0.46 
+##   b-&gt;h4  i1-&gt;h4  i2-&gt;h4  i3-&gt;h4  i4-&gt;h4  i5-&gt;h4  i6-&gt;h4  i7-&gt;h4  i8-&gt;h4 
+##   -0.20   -0.13    0.10    0.13    0.31   -0.15    0.59    0.65   -0.37 
+##  i9-&gt;h4 i10-&gt;h4 i11-&gt;h4 i12-&gt;h4 i13-&gt;h4 i14-&gt;h4 i15-&gt;h4 i16-&gt;h4 i17-&gt;h4 
+##    0.31    0.57    0.14    0.18    0.61    0.49    0.11    0.45   -0.54 
+## i18-&gt;h4 i19-&gt;h4 i20-&gt;h4 i21-&gt;h4 i22-&gt;h4 i23-&gt;h4 i24-&gt;h4 i25-&gt;h4 i26-&gt;h4 
+##    0.37    0.17   -0.49   -0.59   -0.05    0.39    0.33    0.44   -0.46 
+## i27-&gt;h4 i28-&gt;h4 i29-&gt;h4 i30-&gt;h4 i31-&gt;h4 i32-&gt;h4 i33-&gt;h4 i34-&gt;h4 i35-&gt;h4 
+##    0.62   -0.29   -0.49    0.31   -0.25    0.39   -0.15    0.25    0.39 
+## i36-&gt;h4 i37-&gt;h4 i38-&gt;h4 i39-&gt;h4 
+##   -0.44   -0.66   -0.51    0.25 
+##   b-&gt;h5  i1-&gt;h5  i2-&gt;h5  i3-&gt;h5  i4-&gt;h5  i5-&gt;h5  i6-&gt;h5  i7-&gt;h5  i8-&gt;h5 
+##    0.61    0.07    0.14   -0.42    0.05   -0.45   -0.07   -0.26   -0.54 
+##  i9-&gt;h5 i10-&gt;h5 i11-&gt;h5 i12-&gt;h5 i13-&gt;h5 i14-&gt;h5 i15-&gt;h5 i16-&gt;h5 i17-&gt;h5 
+##   -0.44    0.32   -0.12   -0.12   -0.03   -0.10   -0.51    0.45    0.13 
+## i18-&gt;h5 i19-&gt;h5 i20-&gt;h5 i21-&gt;h5 i22-&gt;h5 i23-&gt;h5 i24-&gt;h5 i25-&gt;h5 i26-&gt;h5 
+##    0.41    0.38    0.59    0.51   -0.26   -0.34    0.34    0.35    0.59 
+## i27-&gt;h5 i28-&gt;h5 i29-&gt;h5 i30-&gt;h5 i31-&gt;h5 i32-&gt;h5 i33-&gt;h5 i34-&gt;h5 i35-&gt;h5 
+##    0.41   -0.51   -0.30   -0.43    0.40   -0.52   -0.52   -0.60   -0.63 
+## i36-&gt;h5 i37-&gt;h5 i38-&gt;h5 i39-&gt;h5 
+##    0.04   -0.54    0.34    0.32 
+##  b-&gt;o h1-&gt;o h2-&gt;o h3-&gt;o h4-&gt;o h5-&gt;o 
+## -4.47  3.21  1.71  2.11 14.19  0.54</code></pre>
+<div id="how-many-input-nodes-are-in-the-ann" class="section level6">
+<h6>10.1.1. How many input nodes are in the ANN?</h6>
+<p>39 ###### 10.1.2. How many weights are in the ANN? 206 weights ###### 10.1.3. Use library(caret) and the code in Module 6 to create the confusion matrix for test_data. Fill out the confusion matrix in below. Use “W” as the value of option positive in confusionMatrix() function.</p>
+<pre class="r"><code>predicted_values &lt;- predict(ann, test_data,type= &quot;raw&quot;)
+pred &lt;- factor( ifelse(predicted_values[,1] &gt; 0.5, &#39;W&#39;, &#39;L&#39;) )
+confusionMatrix(pred, test_data$gen_election, positive = &#39;W&#39;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   L   W
+##          L 116  11
+##          W  31 121
+##                                          
+##                Accuracy : 0.8495         
+##                  95% CI : (0.802, 0.8893)
+##     No Information Rate : 0.5269         
+##     P-Value [Acc &gt; NIR] : &lt; 2e-16        
+##                                          
+##                   Kappa : 0.7004         
+##                                          
+##  Mcnemar&#39;s Test P-Value : 0.00337        
+##                                          
+##             Sensitivity : 0.9167         
+##             Specificity : 0.7891         
+##          Pos Pred Value : 0.7961         
+##          Neg Pred Value : 0.9134         
+##              Prevalence : 0.4731         
+##          Detection Rate : 0.4337         
+##    Detection Prevalence : 0.5448         
+##       Balanced Accuracy : 0.8529         
+##                                          
+##        &#39;Positive&#39; Class : W              
+## </code></pre>
+</div>
+<div id="what-is-the-value-of-sensitivity" class="section level6">
+<h6>10.1.4. What is the value of sensitivity?</h6>
+<p>Sensitivity : 0.9470 ###### 10.1.5. What is the value of specificity? 1-0.7823 = 0.2177</p>
+</div>
+<div id="use-the-code-in-module-6-to-calculate-auc-and-create-the-roc-curve.-1" class="section level6">
+<h6>10.1.6. Use the code in Module 6 to calculate AUC and create the ROC curve.</h6>
+</div>
+<div id="what-is-the-value-of-auc-1" class="section level6">
+<h6>10.1.6.1. What is the value of AUC?</h6>
+<p>AUC= 0.9351</p>
+</div>
+<div id="paste-the-roc-curve-in-the-space-below-1" class="section level6">
+<h6>10.1.6.2. Paste the ROC curve in the space below:</h6>
+<pre class="r"><code>predicted_values &lt;- predict(ann, test_data,type= &quot;raw&quot;)
+pred &lt;- prediction(predicted_values, test_data$gen_election)
+perf &lt;- performance(pred, measure = &quot;tpr&quot;, x.measure = &quot;fpr&quot;)
+auc &lt;- performance(pred, measure = &quot;auc&quot;)
+auc &lt;- auc@y.values[[1]]
+roc.data &lt;- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model=&quot;ANN&quot;)
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+</div>
+<div id="points-increase-the-number-of-hidden-nodes-until-you-get-the-following-error-error-in-nnet.defaultx-y-w-entropy-true-too-many-1026-weights.-use-the-maximum-number-of-hidden-nodes-that-you-can-use-to-build-your-ann-classifier." class="section level5">
+<h5>10.2. (6 points) Increase the number of hidden nodes until you get the following error: “Error in nnet.default(x, y, w, entropy = TRUE, …) : too many (1026) weights.” Use the maximum number of hidden nodes that you can use to build your ANN classifier.</h5>
+<pre class="r"><code>#ann1 &lt;- nnet(train_data$gen_election ~ ., data=train_data, size=25, maxit=1000) </code></pre>
+<p>ANN with 24 hidden nodes:</p>
+<pre class="r"><code>ann1 &lt;- nnet(train_data$gen_election ~ ., data=train_data, size=24, maxit=1000) </code></pre>
+<pre><code>## # weights:  985
+## initial  value 592.818065 
+## iter  10 value 158.205699
+## iter  20 value 153.530798
+## iter  30 value 153.292823
+## iter  40 value 153.285774
+## final  value 153.285114 
+## converged</code></pre>
+<div id="what-is-the-maximum-number-of-hidden-nodes-that-we-could-use" class="section level6">
+<h6>10.2.1. What is the maximum number of hidden nodes that we could use?</h6>
+<p>24 It gives an error with 25 nodes.</p>
+</div>
+</div>
+</div>
+<div id="use-the-code-in-module-6-to-calculate-auc-and-create-the-roc-curve.-2" class="section level4">
+<h4>10.2.2. Use the code in Module 6 to calculate AUC and create the ROC curve.</h4>
+<pre class="r"><code>predicted_values &lt;- predict(ann1, test_data,type= &quot;raw&quot;)
+pred &lt;- factor( ifelse(predicted_values[,1] &gt; 0.5, &#39;W&#39;, &#39;L&#39;) )
+confusionMatrix(pred, test_data$gen_election, positive = &#39;W&#39;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   L   W
+##          L 131  21
+##          W  16 111
+##                                           
+##                Accuracy : 0.8674          
+##                  95% CI : (0.8219, 0.9049)
+##     No Information Rate : 0.5269          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.7335          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.5108          
+##                                           
+##             Sensitivity : 0.8409          
+##             Specificity : 0.8912          
+##          Pos Pred Value : 0.8740          
+##          Neg Pred Value : 0.8618          
+##              Prevalence : 0.4731          
+##          Detection Rate : 0.3978          
+##    Detection Prevalence : 0.4552          
+##       Balanced Accuracy : 0.8660          
+##                                           
+##        &#39;Positive&#39; Class : W               
+## </code></pre>
+<div id="what-is-the-value-of-auc-2" class="section level6">
+<h6>10.2.2.1. What is the value of AUC?</h6>
+<p>Auc= 0.93800</p>
+</div>
+<div id="paste-the-roc-curve-in-the-space-below-2" class="section level6">
+<h6>10.2.2.2. Paste the ROC curve in the space below:</h6>
+<pre class="r"><code>predicted_values &lt;- predict(ann1, test_data,type= &quot;raw&quot;)
+pred &lt;- prediction(predicted_values, test_data$gen_election)
+perf &lt;- performance(pred, measure = &quot;tpr&quot;, x.measure = &quot;fpr&quot;)
+
+auc &lt;- performance(pred, measure = &quot;auc&quot;)
+auc &lt;- auc@y.values[[1]]
+roc.data &lt;- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model=&quot;ANN&quot;)
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="points-among-the-three-classifiers-that-you-built-which-classifier-would-you-finally-use-for-predicting-the-elections-outcome-please-explain." class="section level6">
+<h6>11. (5 points) Among the three classifiers that you built, which classifier would you finally use for predicting the election’s outcome? Please explain.</h6>
+<p>Among the three classifiers built, I’d definitely go for Random Forest with 70 trees and 4 variables over ANN with 5 layers and ANN with 24 laters because: 1. Accuracy: Random Forest : 92.11% ANN with 5 hidden nodes: 86.02% ANN with 24 hidden nodes: 86.74% RF has the maximum accuracy on the test data out of the 3 classifiers in picture.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Area Under Curve: Random Forest : 98% ANN with 5 hidden nodes: 93.5% ANN with 24 hidden nodes: 93.5% As the area under an ROC curve is a measure of the usefulness of a test in general, where a greater area means a more useful test, the areas under ROC curves are used to compare the usefulness of tests. Since RF has the maximum AUC, I’d use it out of the 3.</li>
+</ol>
+</div>
+<div id="points-the-buzz-from-the-2008-election-motivated-the-candidates-for-political-offices-to-employ-social-media-campaigns-to-get-their-message-across.-imagine-that-you-are-an-advisor-to-a-candidate-who-is-running-for-a-congressional-seat.-based-on-your-analysis-would-you-recommend-sparing-money-and-resources-to-create-social-media-campaigns-if-so-among-the-three-social-media-platforms-facebook-twitter-and-youtube-which-platform-would-you-recommend-to-invest-in-please-explain.-you-can-use-function-ftable-in-module-3-to-support-your-recommendation." class="section level6">
+<h6>12. (10 points) The buzz from the 2008 election motivated the candidates for political offices to employ social media campaigns to get their message across. Imagine that you are an advisor to a candidate who is running for a Congressional seat. Based on your analysis, would you recommend sparing money and resources to create social media campaigns? If so, among the three social media platforms (Facebook, Twitter, and YouTube), which platform would you recommend to invest in? Please explain. You can use function ftable() in Module 3 to support your recommendation.</h6>
+<p>Let’s compute a column ‘socialmedia’:</p>
+<pre class="r"><code>#Any kind of Social media used : 1, No Social Media: 0
+socialmedia = ifelse(data[&#39;facebook&#39;] ==1 | data[&#39;twitter&#39;]==1 | data[&#39;youtube&#39;]==1,1,0)
+
+
+socialmedia=as.factor(socialmedia)
+data[&#39;socialmedia&#39;]=socialmedia
+
+comparison &lt;- ftable(xtabs(~socialmedia+gen_election, data=data))
+comparison</code></pre>
+<pre><code>##             gen_election   L   W
+## socialmedia                     
+## 0                        472 137
+## 1                         22 298</code></pre>
+<pre class="r"><code>LostwithSM &lt;- 100 * comparison[2] / (comparison[2] + comparison[4]) 
+# %age lost after using Social Media
+LostwithSM</code></pre>
+<pre><code>## [1] 6.875</code></pre>
+<pre class="r"><code>WinwithSM &lt;- 100 * comparison[4] / (comparison[2] + comparison[4]) 
+# %age win after using Social Media
+WinwithSM</code></pre>
+<pre><code>## [1] 93.125</code></pre>
+<p>From the results above, we see that if 93.125% of the times when social media campaigns are employed, there has been a win. We can say from the above chart that Social Media a important feature!</p>
+<p>Moving on to choosing the platform is the most useful:</p>
+<pre class="r"><code>comparison &lt;- ftable(xtabs(~facebook+gen_election, data=data))
+LwithSM &lt;- 100 * comparison[2] / (comparison[2] + comparison[4]) 
+WwithSM &lt;- 100 * comparison[4] / (comparison[2] + comparison[4]) 
+comparison</code></pre>
+<pre><code>##          gen_election   L   W
+## facebook                     
+## 0                     481 206
+## 1                      13 229</code></pre>
+<pre class="r"><code># %age lost after using Facebook
+LwithSM</code></pre>
+<pre><code>## [1] 5.371901</code></pre>
+<pre class="r"><code>#%age win after using Facebook
+WwithSM</code></pre>
+<pre><code>## [1] 94.6281</code></pre>
+<pre class="r"><code>#%age win after using Twitter
+comparison &lt;- ftable(xtabs(~twitter+gen_election, data=data))
+LwithSM &lt;- 100 * comparison[2] / (comparison[2] + comparison[4]) 
+WwithSM &lt;- 100 * comparison[4] / (comparison[2] + comparison[4]) 
+comparison</code></pre>
+<pre><code>##         gen_election   L   W
+## twitter                     
+## 0                    480 250
+## 1                     14 185</code></pre>
+<pre class="r"><code>#%age lost after using Twitter
+LwithSM</code></pre>
+<pre><code>## [1] 7.035176</code></pre>
+<pre class="r"><code>#%age win after using Twitter
+WwithSM</code></pre>
+<pre><code>## [1] 92.96482</code></pre>
+<pre class="r"><code>comparison &lt;- ftable(xtabs(~youtube+gen_election, data=data))
+LwithSM &lt;- 100 * comparison[2] / (comparison[2] + comparison[4]) 
+WwithSM &lt;- 100 * comparison[4] / (comparison[2] + comparison[4]) 
+comparison</code></pre>
+<pre><code>##         gen_election   L   W
+## youtube                     
+## 0                    482 209
+## 1                     12 226</code></pre>
+<pre class="r"><code>#%age lost after using Youtube
+LwithSM</code></pre>
+<pre><code>## [1] 5.042017</code></pre>
+<pre class="r"><code>#%age win after using Youtube
+WwithSM</code></pre>
+<pre><code>## [1] 94.95798</code></pre>
+<p>On using ftable(), for accessing which social media platform should be used for campaigns, we see that candidates using youtube win 94.9% of the time than candidates who use facebook (94.6%) and twitter (92.9%). Let’s confirm our results with RF: Accessing social media platforms with Random Forest:</p>
+<pre class="r"><code>set.seed(62)
+rfSM &lt;- randomForest(gen_election~facebook+youtube+twitter, data=data, na.action=na.exclude, importance=T, proximity=F)
+varImpPlot(rfSM)</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>On using a RF to predict the target variable with the three social media platforms so as to access the importance of each platform, we find out that youtube has the highest value. But if we check our final RF with Test Data only, we see that facebook is at the top of the 3 platforms. I’d say all 3 are equally important but the priority lost would be: 1. Youtube 2. Facebook 3. Twitter (1 - highest, 3 - lowest)</p>
+</div>
+<div id="points-given-your-analysis-would-you-agree-with-this-statement-money-buys-political-power-please-explain." class="section level6">
+<h6>13. (10 points) Given your analysis, would you agree with this statement: “Money Buys Political Power”? Please explain.</h6>
+<p>Yes, we can rightously say that “Money buys Political Power”. Let’s look at our RF model varImpPlot Chart:</p>
+<pre class="r"><code>varImpPlot(finalrf)</code></pre>
+<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>Both of the charts above have some kind of money related factors in the top 5 most important determining factors, either for social media or campaigning. So more the investment is by a candidate, higher are the chances of winning.</p>
+</div>
+<div id="points-imagine-that-you-are-an-advisor-to-a-candidate-who-is-running-for-a-congressional-seat.-based-on-your-analysis-what-are-your-prescriptions-for-success-for-your-candidate-please-explain." class="section level6">
+<h6>14. (10 points) Imagine that you are an advisor to a candidate who is running for a Congressional seat. Based on your analysis, what are your prescriptions for success for your candidate? Please explain.</h6>
+<p>From the variable Importance plot using MeanDecreaseAccuracy and MeanDecease Gini, the most important variables affected a candidates success are opp_fund, other_pol_cmte_contrib, coh_cop, facebook, ttl_disb, From this we can say that money is the deciding factor, the bigger the amount of money you put into the campaigns, the more is the probability of winning. Another significant variable, other than money, is CAND_PTY_AFFILIATION, which one might consider looking into. Moving on: - We can select features based on by making a correlation matrix and taking into account the features which are highly correlated to the target variable(in the range [-1,+1]) - We can perform dimensionality reduction in case our predictor variables are highly correlated. - We can run Logistic Regression on this data and check the coefficients to confirm our results.</p>
+</div>
+</div>

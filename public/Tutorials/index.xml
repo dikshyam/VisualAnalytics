@@ -11,11 +11,20 @@
     
     
     <item>
-      <title>Random Forest Tutorial</title>
-      <link>/tutorials/assignment1/</link>
+      <title>Neural Network Tutorial</title>
+      <link>/tutorials/neural-networks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tutorials/assignment1/</guid>
+      <guid>/tutorials/neural-networks/</guid>
+      <description>An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process.</description>
+    </item>
+    
+    <item>
+      <title>Random Forest Tutorial</title>
+      <link>/tutorials/randomforest/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tutorials/randomforest/</guid>
       <description>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.</description>
     </item>
     

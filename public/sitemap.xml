@@ -39,25 +39,20 @@
   </url>
   
   <url>
+    <loc>/posts/neural-networks/</loc>
+  </url>
+  
+  <url>
     <loc>/posts/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tutorials/assignment1/</loc>
-  </url>
-  
-  <url>
-    <loc>/posts/assignment1/</loc>
+    <loc>/posts/randomforest/</loc>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tutorials/</loc>
     <priority>0</priority>
   </url>
   

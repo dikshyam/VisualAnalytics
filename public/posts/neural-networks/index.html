@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.5" />
+
+    
+    
+    
+
+<title>Neural Network Tutorial • Dikshya Mohanty</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Neural Network Tutorial"/>
+<meta name="twitter:description" content="An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process."/>
+
+<meta property="og:title" content="Neural Network Tutorial" />
+<meta property="og:description" content="An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/neural-networks/" />
+<meta property="og:site_name" content="Title" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/scss/hyde-hyde.6a83d62c39a364f036df4db1ecd564645635d6c7fc182425cb501218fec485f5.css" integrity="sha256-aoPWLDmjZPA2302x7NVkZFY11sf8GCQly1ASGP7EhfU=">
+
+
+<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+</head>
+
+
+    <body class=" ">
+    
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      <span class="site__title">
+        <a href="/">Dikshya Mohanty</a>
+      </span>
+      
+        
+        
+        
+        <div class="author-image">
+          <img src="/img/dp1.jpg" alt="Author Image" class="img--circle img--headshot element--center">
+        </div>
+        
+      
+      
+      <p class="site__description">
+        
+      </p>
+    </div>
+    <div class="collapsible-menu">
+      <input type="checkbox" id="menuToggle">
+      <label for="menuToggle">Dikshya Mohanty</label>
+      <div class="menu-content">
+        <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/education/">
+						<span>Education</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/professionalsummary/">
+						<span>Professional Summary</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/projects/">
+						<span>Projects</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/posts/">
+						<span>Tutorials</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+        <section class="social">
+	
+	
+	
+	<a href="https://github.com/Dikshyam" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	<a href="https://instagram.com/dikshyamohanty_" rel="me"><i class="fab fa-instagram fa-lg" aria-hidden="true"></i></a>
+	
+	
+	<a href="https://linkedin.com/in/dikshya-mohanty-79b61ba3" rel="me"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+	<a href="mailto:dmohanty@uncc.edu" rel="me"><i class="fas fa-at fa-lg" aria-hidden="true"></i></a>
+	
+</section>
+
+      </div>
+    </div>
+    
+<div class="copyright">
+  &copy; 2019 htr3n
+  
+    <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>
+  
+</div>
+
+
+<div class="builtwith">
+Built with <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+</div>
+
+
+  </div>
+</div>
+
+        <div class="content container">
+            
+    
+<article>
+  <header>
+    <h1>Neural Network Tutorial</h1>
+    
+    
+<div class="post__meta">
+    
+    
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 17 min read
+</div>
+
+
+  </header>
+  
+  
+  <div class="post">
+    
+
+
+<p>An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process. Learning in biological systems involves adjustments to the synaptic connections that exist between the neurons. This is true about ANNs as well. The basic idea behind a neural network is to simulate (copy in a simplified but reasonably faithful way) lots of densely interconnected brain cells inside a computer so we can get it to learn things, recognize patterns, and make decisions in a human-like way. The amazing thing about a neural network is that we don’t have to program it to learn explicitly: it learns all by itself, just like human brain!</p>
+<p>Let’s do a quick tutorial on Neural Networks:</p>
+<p>Importing the Library Packages needed for this code</p>
+<pre class="r"><code>library(randomForest)</code></pre>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre class="r"><code>library(caret)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggplot2&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:randomForest&#39;:
+## 
+##     margin</code></pre>
+<pre class="r"><code>library(ROCR)</code></pre>
+<pre><code>## Loading required package: gplots</code></pre>
+<pre><code>## 
+## Attaching package: &#39;gplots&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     lowess</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(nnet)</code></pre>
+<p>Reading the file:</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;election_campaign_data.csv&quot;, sep=&quot;,&quot;, header=T, strip.white = T, na.strings = c(&quot;NA&quot;,&quot;NaN&quot;,&quot;&quot;,&quot;?&quot;)) 
+summary(data)</code></pre>
+<pre><code>##       cand_id      last_name     first_name   twitterbirth
+##  H0AK00089:  1   MILLER : 10   JIM    :  9   1/4/11 :  7  
+##  H0AL01048:  1   SMITH  :  9   DAVID  :  8   1/7/11 :  6  
+##  H0AL02087:  1   JOHNSON:  7   JOHN   :  7   2/2/09 :  6  
+##  H0AL03184:  1   WILSON :  7   MIKE   :  7   1/25/11:  5  
+##  H0AL05163:  1   DAVIS  :  5   MICHAEL:  6   1/6/11 :  5  
+##  H0AL05197:  1   EDWARDS:  5   ROBERT :  5   (Other):320  
+##  (Other)  :935   (Other):898   (Other):899   NA&#39;s   :592  
+##     twitter        facebookdate    facebook       facebookjan    
+##  Min.   :0.0000   1/6/11 :  4   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.0000   5/11/09:  4   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :0.0000   1/1/10 :  3   Median :0.0000   Median :0.0000  
+##  Mean   :0.2136   2/7/11 :  3   Mean   :0.2604   Mean   :0.2816  
+##  3rd Qu.:0.0000   3/11/09:  3   3rd Qu.:1.0000   3rd Qu.:1.0000  
+##  Max.   :1.0000   (Other):342   Max.   :1.0000   Max.   :1.0000  
+##                   NA&#39;s   :582                                    
+##     youtubebirth    youtube       cand_ici cand_pty_affiliation
+##  11-Jan-11:  7   Min.   :0.0000   C:452    REP    :424         
+##  12-Jan-11:  7   1st Qu.:0.0000   I:398    DEM    :389         
+##  7-Jan-11 :  7   Median :0.0000   O: 91    IND    : 42         
+##  13-Jan-11:  6   Mean   :0.2561            LIB    : 29         
+##  19-Jan-11:  6   3rd Qu.:1.0000            OTH    : 14         
+##  (Other)  :307   Max.   :1.0000            UNK    :  9         
+##  NA&#39;s     :601                             (Other): 34         
+##   ttl_receipts      trans_from_auth      ttl_disb        trans_to_auth    
+##  Min.   :       0   Min.   :      0   Min.   :       0   Min.   :      0  
+##  1st Qu.:   88848   1st Qu.:      0   1st Qu.:   86440   1st Qu.:      0  
+##  Median :  810054   Median :      0   Median :  790374   Median :      0  
+##  Mean   : 1015225   Mean   :  11405   Mean   : 1009054   Mean   :   9514  
+##  3rd Qu.: 1519582   3rd Qu.:      0   3rd Qu.: 1440465   3rd Qu.:      0  
+##  Max.   :13567811   Max.   :1491686   Max.   :11666973   Max.   :1755000  
+##                                                                           
+##     coh_bop           coh_cop         cand_contrib         cand_loans     
+##  Min.   :  -4655   Min.   : -22127   Min.   :      0.0   Min.   :      0  
+##  1st Qu.:      0   1st Qu.:    467   1st Qu.:      0.0   1st Qu.:      0  
+##  Median :     88   Median :  15431   Median :      0.0   Median :      0  
+##  Mean   : 163807   Mean   : 168553   Mean   :  12530.8   Mean   :  47610  
+##  3rd Qu.: 118604   3rd Qu.: 139546   3rd Qu.:    384.9   3rd Qu.:   6000  
+##  Max.   :3467869   Max.   :3129902   Max.   :2593364.5   Max.   :7905050  
+##                                                                           
+##   other_loans       cand_loan_repay   other_loan_repay debts_owed_by    
+##  Min.   :     0.0   Min.   :      0   Min.   :     0   Min.   :      0  
+##  1st Qu.:     0.0   1st Qu.:      0   1st Qu.:     0   1st Qu.:      0  
+##  Median :     0.0   Median :      0   Median :     0   Median :      0  
+##  Mean   :   586.1   Mean   :  18884   Mean   :   559   Mean   :  47423  
+##  3rd Qu.:     0.0   3rd Qu.:      0   3rd Qu.:     0   3rd Qu.:  20000  
+##  Max.   :150000.0   Max.   :6175000   Max.   :170800   Max.   :2265000  
+##                                                                         
+##  ttl_indiv_contrib  other_pol_cmte_contrib pol_pty_contrib
+##  Min.   :       0   Min.   :      0        Min.   :    0  
+##  1st Qu.:   54974   1st Qu.:   1000        1st Qu.:    0  
+##  Median :  414189   Median : 233579        Median :  190  
+##  Mean   :  589384   Mean   : 339343        Mean   : 2480  
+##  3rd Qu.:  830829   3rd Qu.: 522514        3rd Qu.: 2912  
+##  Max.   :12959903   Max.   :2857030        Max.   :59030  
+##                                                           
+##  indiv_refunds     cmte_refunds         opp_fund             age       
+##  Min.   : -1300   Min.   :-26000.0   Min.   :       0   Min.   :28.00  
+##  1st Qu.:     0   1st Qu.:     0.0   1st Qu.:  189377   1st Qu.:50.00  
+##  Median :   305   Median :     0.0   Median : 1030436   Median :58.00  
+##  Mean   :  3246   Mean   :   948.8   Mean   : 1321742   Mean   :57.28  
+##  3rd Qu.:  3200   3rd Qu.:   500.0   3rd Qu.: 1845156   3rd Qu.:64.00  
+##  Max.   :306050   Max.   : 28000.0   Max.   :18292250   Max.   :86.00  
+##                                                         NA&#39;s   :12     
+##   gender    gen_election
+##  F   :156   L:501       
+##  M   :773   W:440       
+##  NA&#39;s: 12               
+##                         
+##                         
+##                         
+## </code></pre>
+<p>Dropping the following variables from the data: “cand_id”, “last_name”, “first_name”, “twitterbirth”, “facebookdate”, “facebookjan”, “youtubebirth”.</p>
+<pre class="r"><code>cols &lt;- c(&quot;cand_id&quot;, &quot;last_name&quot;, &quot;first_name&quot;, &quot;twitterbirth&quot;, &quot;facebookdate&quot;, &quot;facebookjan&quot;, &quot;youtubebirth&quot;)
+data[,cols] &lt;- list(NULL)
+summary(data)</code></pre>
+<pre><code>##     twitter          facebook         youtube       cand_ici
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   C:452   
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   I:398   
+##  Median :0.0000   Median :0.0000   Median :0.0000   O: 91   
+##  Mean   :0.2136   Mean   :0.2604   Mean   :0.2561           
+##  3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:1.0000           
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000           
+##                                                             
+##  cand_pty_affiliation  ttl_receipts      trans_from_auth  
+##  REP    :424          Min.   :       0   Min.   :      0  
+##  DEM    :389          1st Qu.:   88848   1st Qu.:      0  
+##  IND    : 42          Median :  810054   Median :      0  
+##  LIB    : 29          Mean   : 1015225   Mean   :  11405  
+##  OTH    : 14          3rd Qu.: 1519582   3rd Qu.:      0  
+##  UNK    :  9          Max.   :13567811   Max.   :1491686  
+##  (Other): 34                                              
+##     ttl_disb        trans_to_auth        coh_bop           coh_cop       
+##  Min.   :       0   Min.   :      0   Min.   :  -4655   Min.   : -22127  
+##  1st Qu.:   86440   1st Qu.:      0   1st Qu.:      0   1st Qu.:    467  
+##  Median :  790374   Median :      0   Median :     88   Median :  15431  
+##  Mean   : 1009054   Mean   :   9514   Mean   : 163807   Mean   : 168553  
+##  3rd Qu.: 1440465   3rd Qu.:      0   3rd Qu.: 118604   3rd Qu.: 139546  
+##  Max.   :11666973   Max.   :1755000   Max.   :3467869   Max.   :3129902  
+##                                                                          
+##   cand_contrib         cand_loans       other_loans      
+##  Min.   :      0.0   Min.   :      0   Min.   :     0.0  
+##  1st Qu.:      0.0   1st Qu.:      0   1st Qu.:     0.0  
+##  Median :      0.0   Median :      0   Median :     0.0  
+##  Mean   :  12530.8   Mean   :  47610   Mean   :   586.1  
+##  3rd Qu.:    384.9   3rd Qu.:   6000   3rd Qu.:     0.0  
+##  Max.   :2593364.5   Max.   :7905050   Max.   :150000.0  
+##                                                          
+##  cand_loan_repay   other_loan_repay debts_owed_by     ttl_indiv_contrib 
+##  Min.   :      0   Min.   :     0   Min.   :      0   Min.   :       0  
+##  1st Qu.:      0   1st Qu.:     0   1st Qu.:      0   1st Qu.:   54974  
+##  Median :      0   Median :     0   Median :      0   Median :  414189  
+##  Mean   :  18884   Mean   :   559   Mean   :  47423   Mean   :  589384  
+##  3rd Qu.:      0   3rd Qu.:     0   3rd Qu.:  20000   3rd Qu.:  830829  
+##  Max.   :6175000   Max.   :170800   Max.   :2265000   Max.   :12959903  
+##                                                                         
+##  other_pol_cmte_contrib pol_pty_contrib indiv_refunds   
+##  Min.   :      0        Min.   :    0   Min.   : -1300  
+##  1st Qu.:   1000        1st Qu.:    0   1st Qu.:     0  
+##  Median : 233579        Median :  190   Median :   305  
+##  Mean   : 339343        Mean   : 2480   Mean   :  3246  
+##  3rd Qu.: 522514        3rd Qu.: 2912   3rd Qu.:  3200  
+##  Max.   :2857030        Max.   :59030   Max.   :306050  
+##                                                         
+##   cmte_refunds         opp_fund             age         gender   
+##  Min.   :-26000.0   Min.   :       0   Min.   :28.00   F   :156  
+##  1st Qu.:     0.0   1st Qu.:  189377   1st Qu.:50.00   M   :773  
+##  Median :     0.0   Median : 1030436   Median :58.00   NA&#39;s: 12  
+##  Mean   :   948.8   Mean   : 1321742   Mean   :57.28             
+##  3rd Qu.:   500.0   3rd Qu.: 1845156   3rd Qu.:64.00             
+##  Max.   : 28000.0   Max.   :18292250   Max.   :86.00             
+##                                        NA&#39;s   :12                
+##  gen_election
+##  L:501       
+##  W:440       
+##              
+##              
+##              
+##              
+## </code></pre>
+<p>Converting the following variables into factor variables using function as.factor(): “twitter”, “facebook”, “youtube”, “cand_ici”, and “gen_election”.</p>
+<pre class="r"><code>data$twitter &lt;- as.factor(data$twitter)
+data$facebook &lt;- as.factor(data$facebook)
+data$youtube &lt;- as.factor(data$youtube)
+data$cand_ici &lt;- as.factor(data$cand_ici)
+data$gen_election &lt;- as.factor(data$gen_election)
+summary(data)</code></pre>
+<pre><code>##  twitter facebook youtube cand_ici cand_pty_affiliation  ttl_receipts     
+##  0:740   0:696    0:700   C:452    REP    :424          Min.   :       0  
+##  1:201   1:245    1:241   I:398    DEM    :389          1st Qu.:   88848  
+##                           O: 91    IND    : 42          Median :  810054  
+##                                    LIB    : 29          Mean   : 1015225  
+##                                    OTH    : 14          3rd Qu.: 1519582  
+##                                    UNK    :  9          Max.   :13567811  
+##                                    (Other): 34                            
+##  trans_from_auth      ttl_disb        trans_to_auth        coh_bop       
+##  Min.   :      0   Min.   :       0   Min.   :      0   Min.   :  -4655  
+##  1st Qu.:      0   1st Qu.:   86440   1st Qu.:      0   1st Qu.:      0  
+##  Median :      0   Median :  790374   Median :      0   Median :     88  
+##  Mean   :  11405   Mean   : 1009054   Mean   :   9514   Mean   : 163807  
+##  3rd Qu.:      0   3rd Qu.: 1440465   3rd Qu.:      0   3rd Qu.: 118604  
+##  Max.   :1491686   Max.   :11666973   Max.   :1755000   Max.   :3467869  
+##                                                                          
+##     coh_cop         cand_contrib         cand_loans     
+##  Min.   : -22127   Min.   :      0.0   Min.   :      0  
+##  1st Qu.:    467   1st Qu.:      0.0   1st Qu.:      0  
+##  Median :  15431   Median :      0.0   Median :      0  
+##  Mean   : 168553   Mean   :  12530.8   Mean   :  47610  
+##  3rd Qu.: 139546   3rd Qu.:    384.9   3rd Qu.:   6000  
+##  Max.   :3129902   Max.   :2593364.5   Max.   :7905050  
+##                                                         
+##   other_loans       cand_loan_repay   other_loan_repay debts_owed_by    
+##  Min.   :     0.0   Min.   :      0   Min.   :     0   Min.   :      0  
+##  1st Qu.:     0.0   1st Qu.:      0   1st Qu.:     0   1st Qu.:      0  
+##  Median :     0.0   Median :      0   Median :     0   Median :      0  
+##  Mean   :   586.1   Mean   :  18884   Mean   :   559   Mean   :  47423  
+##  3rd Qu.:     0.0   3rd Qu.:      0   3rd Qu.:     0   3rd Qu.:  20000  
+##  Max.   :150000.0   Max.   :6175000   Max.   :170800   Max.   :2265000  
+##                                                                         
+##  ttl_indiv_contrib  other_pol_cmte_contrib pol_pty_contrib
+##  Min.   :       0   Min.   :      0        Min.   :    0  
+##  1st Qu.:   54974   1st Qu.:   1000        1st Qu.:    0  
+##  Median :  414189   Median : 233579        Median :  190  
+##  Mean   :  589384   Mean   : 339343        Mean   : 2480  
+##  3rd Qu.:  830829   3rd Qu.: 522514        3rd Qu.: 2912  
+##  Max.   :12959903   Max.   :2857030        Max.   :59030  
+##                                                           
+##  indiv_refunds     cmte_refunds         opp_fund             age       
+##  Min.   : -1300   Min.   :-26000.0   Min.   :       0   Min.   :28.00  
+##  1st Qu.:     0   1st Qu.:     0.0   1st Qu.:  189377   1st Qu.:50.00  
+##  Median :   305   Median :     0.0   Median : 1030436   Median :58.00  
+##  Mean   :  3246   Mean   :   948.8   Mean   : 1321742   Mean   :57.28  
+##  3rd Qu.:  3200   3rd Qu.:   500.0   3rd Qu.: 1845156   3rd Qu.:64.00  
+##  Max.   :306050   Max.   : 28000.0   Max.   :18292250   Max.   :86.00  
+##                                                         NA&#39;s   :12     
+##   gender    gen_election
+##  F   :156   L:501       
+##  M   :773   W:440       
+##  NA&#39;s: 12               
+##                         
+##                         
+##                         
+## </code></pre>
+<p>Removing all of the observations with any missing values using function complete.cases()</p>
+<pre class="r"><code>data &lt;- data[complete.cases(data),]
+head(data)</code></pre>
+<pre><code>##   twitter facebook youtube cand_ici cand_pty_affiliation ttl_receipts
+## 1       0        0       0        C                  DEM     48278.52
+## 2       0        0       0        C                  GRE       445.00
+## 3       0        0       0        C                  REP    446468.16
+## 4       0        0       0        C                  REP     87768.00
+## 5       0        1       0        C                  DEM    240439.23
+## 6       0        0       0        C                  DEM    239084.08
+##   trans_from_auth  ttl_disb trans_to_auth coh_bop   coh_cop cand_contrib
+## 1               0  48418.03             0  131.53     -7.98      5956.62
+## 2               0    249.00             0  138.00    277.00         0.00
+## 3               0 442922.50             0    0.00   7120.68      6872.53
+## 4               0  83938.88             0  754.67 -12456.34      3330.00
+## 5               0 235571.44             0    0.00   4867.81      5832.41
+## 6               0 235849.91             0    0.00   2707.84         0.00
+##   cand_loans other_loans cand_loan_repay other_loan_repay debts_owed_by
+## 1    9133.73           0         5558.25                0       3575.48
+## 2       0.00           0            0.00                0          0.00
+## 3   35000.00           0            0.00                0      45000.00
+## 4       0.00           0            0.00                0          0.00
+## 5       0.00           0            0.00                0       5000.00
+## 6       0.00           0            0.00                0         49.54
+##   ttl_indiv_contrib other_pol_cmte_contrib pol_pty_contrib indiv_refunds
+## 1           25583.2                6934.75          500.00             0
+## 2             445.0                   0.00            0.00             0
+## 3          373778.6               29417.01         1400.00           200
+## 4           84338.0                 100.00            0.00             0
+## 5          214136.6               14200.00         1749.99           850
+## 6          198615.7               34700.00         5000.00           350
+##   cmte_refunds  opp_fund age gender gen_election
+## 1            0  688155.1  75      M            L
+## 2            0 1398240.4  60      M            L
+## 3            0 1312116.6  64      M            L
+## 4            0  609897.9  69      M            L
+## 5          500 1001015.4  76      M            L
+## 6            0 1205985.1  66      M            L</code></pre>
+<p>Randomly assigning 70% of the observations to train_data and the remaining observations to test_data (Refer to Module 6 for the code).</p>
+<pre class="r"><code>set.seed(42)
+td &lt;- sample(1:nrow(data), 0.7 * nrow(data))
+train_data &lt;- data[td,]
+test_data &lt;- data[setdiff(1:nrow(data), td),]
+summary(train_data)</code></pre>
+<pre><code>##  twitter facebook youtube cand_ici cand_pty_affiliation  ttl_receipts    
+##  0:510   0:488    0:487   C:315    REP    :285          Min.   :      0  
+##  1:140   1:162    1:163   I:274    DEM    :281          1st Qu.: 112319  
+##                           O: 61    IND    : 29          Median : 831758  
+##                                    LIB    : 19          Mean   :1031133  
+##                                    OTH    :  9          3rd Qu.:1515004  
+##                                    UNK    :  8          Max.   :9796947  
+##                                    (Other): 19                           
+##  trans_from_auth      ttl_disb       trans_to_auth        coh_bop         
+##  Min.   :      0   Min.   :      0   Min.   :      0   Min.   :  -4654.9  
+##  1st Qu.:      0   1st Qu.: 107547   1st Qu.:      0   1st Qu.:      0.0  
+##  Median :      0   Median : 794593   Median :      0   Median :     79.4  
+##  Mean   :  13292   Mean   :1031544   Mean   :  10321   Mean   : 153863.4  
+##  3rd Qu.:      0   3rd Qu.:1513268   3rd Qu.:      0   3rd Qu.: 109785.2  
+##  Max.   :1491686   Max.   :9876911   Max.   :1755000   Max.   :2765078.3  
+##                                                                           
+##     coh_cop           cand_contrib         cand_loans     
+##  Min.   : -22127.1   Min.   :      0.0   Min.   :      0  
+##  1st Qu.:    598.6   1st Qu.:      0.0   1st Qu.:      0  
+##  Median :  16136.0   Median :      0.0   Median :      0  
+##  Mean   : 151479.0   Mean   :  10261.5   Mean   :  48717  
+##  3rd Qu.: 127977.5   3rd Qu.:    490.8   3rd Qu.:   5903  
+##  Max.   :3018532.8   Max.   :1934033.9   Max.   :7905050  
+##                                                           
+##   other_loans      cand_loan_repay   other_loan_repay  debts_owed_by    
+##  Min.   :    0.0   Min.   :      0   Min.   :    0.0   Min.   :      0  
+##  1st Qu.:    0.0   1st Qu.:      0   1st Qu.:    0.0   1st Qu.:      0  
+##  Median :    0.0   Median :      0   Median :    0.0   Median :      0  
+##  Mean   :  405.6   Mean   :  21527   Mean   :  134.3   Mean   :  47514  
+##  3rd Qu.:    0.0   3rd Qu.:      0   3rd Qu.:    0.0   3rd Qu.:  24503  
+##  Max.   :50000.0   Max.   :6175000   Max.   :23500.0   Max.   :1741412  
+##                                                                         
+##  ttl_indiv_contrib other_pol_cmte_contrib pol_pty_contrib  
+##  Min.   :      0   Min.   :      0        Min.   :    0.0  
+##  1st Qu.:  55410   1st Qu.:   1175        1st Qu.:    0.0  
+##  Median : 412793   Median : 239236        Median :  222.8  
+##  Mean   : 603630   Mean   : 340183        Mean   : 2565.6  
+##  3rd Qu.: 856388   3rd Qu.: 524059        3rd Qu.: 3000.0  
+##  Max.   :6248913   Max.   :2857030        Max.   :41076.2  
+##                                                            
+##  indiv_refunds    cmte_refunds         opp_fund             age       
+##  Min.   : -615   Min.   :-26000.0   Min.   :       0   Min.   :28.00  
+##  1st Qu.:    0   1st Qu.:     0.0   1st Qu.:  189557   1st Qu.:50.00  
+##  Median :  400   Median :     0.0   Median : 1071729   Median :58.00  
+##  Mean   : 3047   Mean   :   954.8   Mean   : 1298354   Mean   :57.37  
+##  3rd Qu.: 3430   3rd Qu.:   500.0   3rd Qu.: 1905370   3rd Qu.:64.00  
+##  Max.   :60570   Max.   : 28000.0   Max.   :13572720   Max.   :86.00  
+##                                                                       
+##  gender  gen_election
+##  F:108   L:347       
+##  M:542   W:303       
+##                      
+##                      
+##                      
+##                      
+## </code></pre>
+<p>Let’s use library(nnet) and the code to build a neural network classifier.</p>
+<p>Let’s use 5 hidden nodes in our initial ANN.</p>
+<pre class="r"><code>ann &lt;- nnet(train_data$gen_election ~ ., data=train_data, size=5, maxit=1000) </code></pre>
+<pre><code>## # weights:  206
+## initial  value 455.613992 
+## iter  10 value 237.690916
+## final  value 237.675018 
+## converged</code></pre>
+<pre class="r"><code>summary(ann)</code></pre>
+<pre><code>## a 39-5-1 network with 206 weights
+## options were - entropy fitting 
+##   b-&gt;h1  i1-&gt;h1  i2-&gt;h1  i3-&gt;h1  i4-&gt;h1  i5-&gt;h1  i6-&gt;h1  i7-&gt;h1  i8-&gt;h1 
+##   -0.41    0.64    0.52    0.28    0.02   -0.03   -0.42   -0.56   -0.04 
+##  i9-&gt;h1 i10-&gt;h1 i11-&gt;h1 i12-&gt;h1 i13-&gt;h1 i14-&gt;h1 i15-&gt;h1 i16-&gt;h1 i17-&gt;h1 
+##   -0.26    0.38    0.56   -0.23    0.45   -0.39    0.37    0.08   -0.11 
+## i18-&gt;h1 i19-&gt;h1 i20-&gt;h1 i21-&gt;h1 i22-&gt;h1 i23-&gt;h1 i24-&gt;h1 i25-&gt;h1 i26-&gt;h1 
+##    0.47   -0.30   -0.04    0.39   -0.58   -0.15   -0.57   -0.51   -0.39 
+## i27-&gt;h1 i28-&gt;h1 i29-&gt;h1 i30-&gt;h1 i31-&gt;h1 i32-&gt;h1 i33-&gt;h1 i34-&gt;h1 i35-&gt;h1 
+##   -0.32   -0.28   -0.18   -0.01    0.53    0.35    0.64   -0.24    0.45 
+## i36-&gt;h1 i37-&gt;h1 i38-&gt;h1 i39-&gt;h1 
+##   -0.51   -0.53    0.32    0.07 
+##   b-&gt;h2  i1-&gt;h2  i2-&gt;h2  i3-&gt;h2  i4-&gt;h2  i5-&gt;h2  i6-&gt;h2  i7-&gt;h2  i8-&gt;h2 
+##    0.15   -0.53    0.53    0.48   -0.64    0.29    0.05    0.62    0.58 
+##  i9-&gt;h2 i10-&gt;h2 i11-&gt;h2 i12-&gt;h2 i13-&gt;h2 i14-&gt;h2 i15-&gt;h2 i16-&gt;h2 i17-&gt;h2 
+##   -0.06    0.37    0.01   -0.42    0.30    0.38    0.29   -0.43   -0.28 
+## i18-&gt;h2 i19-&gt;h2 i20-&gt;h2 i21-&gt;h2 i22-&gt;h2 i23-&gt;h2 i24-&gt;h2 i25-&gt;h2 i26-&gt;h2 
+##   -0.24    0.10    0.54    0.53   -0.16    0.33    0.41    0.31   -0.16 
+## i27-&gt;h2 i28-&gt;h2 i29-&gt;h2 i30-&gt;h2 i31-&gt;h2 i32-&gt;h2 i33-&gt;h2 i34-&gt;h2 i35-&gt;h2 
+##   -0.28   -0.62    0.24   -0.42    0.18   -0.51   -0.18   -0.26    0.44 
+## i36-&gt;h2 i37-&gt;h2 i38-&gt;h2 i39-&gt;h2 
+##   -0.18   -0.08   -0.09    0.14 
+##   b-&gt;h3  i1-&gt;h3  i2-&gt;h3  i3-&gt;h3  i4-&gt;h3  i5-&gt;h3  i6-&gt;h3  i7-&gt;h3  i8-&gt;h3 
+##   -0.13    0.64    0.66    0.58   -0.58   -0.03   -0.23    0.24    0.19 
+##  i9-&gt;h3 i10-&gt;h3 i11-&gt;h3 i12-&gt;h3 i13-&gt;h3 i14-&gt;h3 i15-&gt;h3 i16-&gt;h3 i17-&gt;h3 
+##    0.50    0.63    0.10    0.05    0.62    0.55   -0.13   -0.63    0.39 
+## i18-&gt;h3 i19-&gt;h3 i20-&gt;h3 i21-&gt;h3 i22-&gt;h3 i23-&gt;h3 i24-&gt;h3 i25-&gt;h3 i26-&gt;h3 
+##    0.60   -0.17   -0.36   -0.58   -0.15   -0.44   -0.51   -0.34    0.07 
+## i27-&gt;h3 i28-&gt;h3 i29-&gt;h3 i30-&gt;h3 i31-&gt;h3 i32-&gt;h3 i33-&gt;h3 i34-&gt;h3 i35-&gt;h3 
+##   -0.49    0.65    0.62    0.69    0.29   -0.50   -0.69    0.26    0.25 
+## i36-&gt;h3 i37-&gt;h3 i38-&gt;h3 i39-&gt;h3 
+##    0.58   -0.13   -0.11    0.05 
+##   b-&gt;h4  i1-&gt;h4  i2-&gt;h4  i3-&gt;h4  i4-&gt;h4  i5-&gt;h4  i6-&gt;h4  i7-&gt;h4  i8-&gt;h4 
+##   -0.12   -0.56   -0.17   -0.42    0.32   -0.68    0.59    0.56    0.36 
+##  i9-&gt;h4 i10-&gt;h4 i11-&gt;h4 i12-&gt;h4 i13-&gt;h4 i14-&gt;h4 i15-&gt;h4 i16-&gt;h4 i17-&gt;h4 
+##    0.63    0.18    0.22   -0.17   -0.61    0.27   -0.52   -0.29    0.19 
+## i18-&gt;h4 i19-&gt;h4 i20-&gt;h4 i21-&gt;h4 i22-&gt;h4 i23-&gt;h4 i24-&gt;h4 i25-&gt;h4 i26-&gt;h4 
+##   -0.15   -0.60    0.51   -0.16    0.24   -0.67    0.13   -0.31   -0.14 
+## i27-&gt;h4 i28-&gt;h4 i29-&gt;h4 i30-&gt;h4 i31-&gt;h4 i32-&gt;h4 i33-&gt;h4 i34-&gt;h4 i35-&gt;h4 
+##   -0.50    0.45   -0.50    0.57    0.56   -0.43    0.05    0.03   -0.48 
+## i36-&gt;h4 i37-&gt;h4 i38-&gt;h4 i39-&gt;h4 
+##    0.03   -0.39   -0.31    0.01 
+##   b-&gt;h5  i1-&gt;h5  i2-&gt;h5  i3-&gt;h5  i4-&gt;h5  i5-&gt;h5  i6-&gt;h5  i7-&gt;h5  i8-&gt;h5 
+##   -0.48    0.59    0.00    0.16    0.34    0.16    0.60   -0.59   -0.66 
+##  i9-&gt;h5 i10-&gt;h5 i11-&gt;h5 i12-&gt;h5 i13-&gt;h5 i14-&gt;h5 i15-&gt;h5 i16-&gt;h5 i17-&gt;h5 
+##    0.06   -0.36    0.20   -0.17   -0.63   -0.63    0.65   -0.38   -0.68 
+## i18-&gt;h5 i19-&gt;h5 i20-&gt;h5 i21-&gt;h5 i22-&gt;h5 i23-&gt;h5 i24-&gt;h5 i25-&gt;h5 i26-&gt;h5 
+##   -0.39   -0.62   -0.37   -0.14   -0.68   -0.19    0.12    0.15   -0.33 
+## i27-&gt;h5 i28-&gt;h5 i29-&gt;h5 i30-&gt;h5 i31-&gt;h5 i32-&gt;h5 i33-&gt;h5 i34-&gt;h5 i35-&gt;h5 
+##    0.25    0.61   -0.69    0.40    0.43   -0.60    0.09    0.05   -0.51 
+## i36-&gt;h5 i37-&gt;h5 i38-&gt;h5 i39-&gt;h5 
+##   -0.31   -0.21    0.44   -0.46 
+##  b-&gt;o h1-&gt;o h2-&gt;o h3-&gt;o h4-&gt;o h5-&gt;o 
+## -2.18  0.37  1.81 -0.09  2.63 -0.65</code></pre>
+<p>Let’s make a confusion matrix for test_data. Fill out the confusion matrix in below. Use “W” as the value of option positive in confusionMatrix() function.</p>
+<pre class="r"><code>predicted_values &lt;- predict(ann, test_data,type= &quot;raw&quot;)
+pred &lt;- factor( ifelse(predicted_values[,1] &gt; 0.5, &#39;W&#39;, &#39;L&#39;) )
+confusionMatrix(pred, test_data$gen_election, positive = &#39;W&#39;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   L   W
+##          L 126  16
+##          W  21 116
+##                                           
+##                Accuracy : 0.8674          
+##                  95% CI : (0.8219, 0.9049)
+##     No Information Rate : 0.5269          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.7345          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.5108          
+##                                           
+##             Sensitivity : 0.8788          
+##             Specificity : 0.8571          
+##          Pos Pred Value : 0.8467          
+##          Neg Pred Value : 0.8873          
+##              Prevalence : 0.4731          
+##          Detection Rate : 0.4158          
+##    Detection Prevalence : 0.4910          
+##       Balanced Accuracy : 0.8680          
+##                                           
+##        &#39;Positive&#39; Class : W               
+## </code></pre>
+<p>Let’s calculate AUC and create the ROC curve.</p>
+<pre class="r"><code>predicted_values &lt;- predict(ann, test_data,type= &quot;raw&quot;)
+pred &lt;- prediction(predicted_values, test_data$gen_election)
+perf &lt;- performance(pred, measure = &quot;tpr&quot;, x.measure = &quot;fpr&quot;)
+auc &lt;- performance(pred, measure = &quot;auc&quot;)
+auc &lt;- auc@y.values[[1]]
+roc.data &lt;- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model=&quot;ANN&quot;)
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
+<p><img src="/posts/neural-networks_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>let’s make an ANN with maximum hidden nodes: ANN with 24 hidden nodes:</p>
+<pre class="r"><code>ann1 &lt;- nnet(train_data$gen_election ~ ., data=train_data, size=24, maxit=1000) </code></pre>
+<pre><code>## # weights:  985
+## initial  value 968.277341 
+## iter  10 value 199.165516
+## iter  20 value 161.890596
+## iter  30 value 161.519364
+## iter  40 value 161.507342
+## iter  50 value 161.502024
+## final  value 161.501886 
+## converged</code></pre>
+<p>Let’s calculate AUC and create the ROC curve for the previous model.</p>
+<pre class="r"><code>predicted_values &lt;- predict(ann1, test_data,type= &quot;raw&quot;)
+pred &lt;- factor( ifelse(predicted_values[,1] &gt; 0.5, &#39;W&#39;, &#39;L&#39;) )
+confusionMatrix(pred, test_data$gen_election, positive = &#39;W&#39;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   L   W
+##          L 127  19
+##          W  20 113
+##                                           
+##                Accuracy : 0.8602          
+##                  95% CI : (0.8139, 0.8987)
+##     No Information Rate : 0.5269          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.7197          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 1               
+##                                           
+##             Sensitivity : 0.8561          
+##             Specificity : 0.8639          
+##          Pos Pred Value : 0.8496          
+##          Neg Pred Value : 0.8699          
+##              Prevalence : 0.4731          
+##          Detection Rate : 0.4050          
+##    Detection Prevalence : 0.4767          
+##       Balanced Accuracy : 0.8600          
+##                                           
+##        &#39;Positive&#39; Class : W               
+## </code></pre>
+<pre class="r"><code>predicted_values &lt;- predict(ann1, test_data,type= &quot;raw&quot;)
+pred &lt;- prediction(predicted_values, test_data$gen_election)
+perf &lt;- performance(pred, measure = &quot;tpr&quot;, x.measure = &quot;fpr&quot;)
+
+auc &lt;- performance(pred, measure = &quot;auc&quot;)
+auc &lt;- auc@y.values[[1]]
+roc.data &lt;- data.frame(fpr=unlist(perf@x.values),
+                       tpr=unlist(perf@y.values),
+                       model=&quot;ANN&quot;)
+ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
+  geom_ribbon(alpha=0.2) +
+  geom_line(aes(y=tpr)) +
+  ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
+<p><img src="/posts/neural-networks_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+
+  </div>
+  
+
+<div class="navigation navigation-single">
+    
+    <a href="/posts/randomforest/" class="navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Random Forest Tutorial</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+
+    
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+        
+    
+    <script type="text/javascript">
+        
+        hljs.initHighlightingOnLoad();
+    </script>
+    
+
+
+
+
+    
+
+
+
+    </body>
+</html>

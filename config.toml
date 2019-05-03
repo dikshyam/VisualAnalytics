@@ -80,7 +80,7 @@ theme = "hyde-hyde"
     url = "/about/"
 
 [[menu.main]]
-    name = "Good Reads"
+    name = "Tutorials"
     identifier = "posts"
     weight = 500
     url = "/posts/"
