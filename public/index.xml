@@ -61,6 +61,24 @@ A semi-automatic text extraction and grouping of theoretical constructs and vari
     </item>
     
     <item>
+      <title>Neural Network Tutorial</title>
+      <link>/posts/neural-networks/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/neural-networks/</guid>
+      <description>An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process.</description>
+    </item>
+    
+    <item>
+      <title>Random Forest Tutorial</title>
+      <link>/posts/randomforest/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/randomforest/</guid>
+      <description>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.</description>
+    </item>
+    
+    <item>
       <title>About Me</title>
       <link>/about/</link>
       <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
@@ -70,24 +88,6 @@ A semi-automatic text extraction and grouping of theoretical constructs and vari
 Skills and Technical Summary:  Statistics and Visualization Softwares: SAS, R Studio, Tableau, SPSS, Anaconda, PostGre, Matlab, STATA
  Programming Languages: Python, SQL, SAS, R, JavaScript, Java, Scala, Perl
  Technical Skills: Machine Learning and AI, Deep Learning and Neural Networks, Statistics, Data Analytics, Business Intelligence, Cross-Section and Time Series Analysis, AWS</description>
-    </item>
-    
-    <item>
-      <title>Neural Network Tutorial</title>
-      <link>/posts/neural-networks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/neural-networks/</guid>
-      <description>An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process.</description>
-    </item>
-    
-    <item>
-      <title>Random Forest Tutorial</title>
-      <link>/posts/randomforest/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/randomforest/</guid>
-      <description>This tutorial explains the random forest algorithm in simple terms and elaborates on how it works by including various examples. It includes a step by step guide for running the random forest algorithm in R. In addition, it highlights the explanation of parameters used in “randomForest” R package. Random Forest is one of the most widely used machine learning algorithms for classification. It can also be used for regression models (i.</description>
     </item>
     
   </channel>

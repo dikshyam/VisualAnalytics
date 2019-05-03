@@ -1,5 +1,6 @@
 ---
 title: "Neural Network Tutorial"
+date: "2019-02-03"
 output: html_document
 ---
 An Artificial Neural Network (ANN) is an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information. The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements (neurons) working in unison to solve specific problems. ANNs, like people, learn by example. An ANN is configured for a specific application, such as pattern recognition or data classification, through a learning process. Learning in biological systems involves adjustments to the synaptic connections that exist between the neurons. This is true about ANNs as well. The basic idea behind a neural network is to simulate (copy in a simplified but reasonably faithful way) lots of densely interconnected brain cells inside a computer so we can get it to learn things, recognize patterns, and make decisions in a human-like way. The amazing thing about a neural network is that we don’t have to program it to learn explicitly: it learns all by itself, just like human brain!

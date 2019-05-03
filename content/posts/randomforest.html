@@ -1,4 +1,5 @@
 ---
+date: "2019-02-03"
 title: "Random Forest Tutorial"
 output: html_document
 ---
@@ -625,7 +626,7 @@ mtry &lt;- tuneRF(train_data[-26], train_data$gen_election, ntreeTry=70,  stepFa
 ## Searching right ...
 ## mtry = 7     OOB error = 6.46% 
 ## -0.07692308 0.01</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>Value for mtry = 4</p>
 <pre class="r"><code>set.seed(42)
 finalrf = randomForest(gen_election~., data=train_data, ntree=70, mtry=4, na.action=na.exclude, importance=T, proximity=F)
@@ -714,14 +715,14 @@ ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
   geom_ribbon(alpha=0.2) +
   geom_line(aes(y=tpr)) +
   ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 <div id="points-use-varimpplot-to-create-the-plot-for-variable-importance.-what-are-the-type-five-important-variables-when-we-use-meandecreaseaccuracy" class="section level5">
 <h5>9.10. (4 points) Use varImpPlot() to create the plot for variable importance. What are the type five important variables when we use MeanDecreaseAccuracy?</h5>
 <p>Opp_fund, other_pol_cmte_contrib, facebook, coh_cop, cand_pty_affiliation</p>
 <pre class="r"><code>varImpPlot(rf)</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 </div>
 <div id="use-librarynnet-and-the-code-in-module-6-to-build-a-neural-network-classifier." class="section level4">
@@ -849,7 +850,7 @@ ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
   geom_ribbon(alpha=0.2) +
   geom_line(aes(y=tpr)) +
   ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 </div>
 <div id="points-increase-the-number-of-hidden-nodes-until-you-get-the-following-error-error-in-nnet.defaultx-y-w-entropy-true-too-many-1026-weights.-use-the-maximum-number-of-hidden-nodes-that-you-can-use-to-build-your-ann-classifier." class="section level5">
@@ -922,7 +923,7 @@ ggplot(roc.data, aes(x=fpr, ymin=0, ymax=tpr)) +
   geom_ribbon(alpha=0.2) +
   geom_line(aes(y=tpr)) +
   ggtitle(paste0(&quot;ROC Curve w/ AUC=&quot;, auc))</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 <div id="points-among-the-three-classifiers-that-you-built-which-classifier-would-you-finally-use-for-predicting-the-elections-outcome-please-explain." class="section level6">
 <h6>11. (5 points) Among the three classifiers that you built, which classifier would you finally use for predicting the election’s outcome? Please explain.</h6>
@@ -1004,14 +1005,14 @@ WwithSM</code></pre>
 <pre class="r"><code>set.seed(62)
 rfSM &lt;- randomForest(gen_election~facebook+youtube+twitter, data=data, na.action=na.exclude, importance=T, proximity=F)
 varImpPlot(rfSM)</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>On using a RF to predict the target variable with the three social media platforms so as to access the importance of each platform, we find out that youtube has the highest value. But if we check our final RF with Test Data only, we see that facebook is at the top of the 3 platforms. I’d say all 3 are equally important but the priority lost would be: 1. Youtube 2. Facebook 3. Twitter (1 - highest, 3 - lowest)</p>
 </div>
 <div id="points-given-your-analysis-would-you-agree-with-this-statement-money-buys-political-power-please-explain." class="section level6">
 <h6>13. (10 points) Given your analysis, would you agree with this statement: “Money Buys Political Power”? Please explain.</h6>
 <p>Yes, we can rightously say that “Money buys Political Power”. Let’s look at our RF model varImpPlot Chart:</p>
 <pre class="r"><code>varImpPlot(finalrf)</code></pre>
-<p><img src="/Tutorials/randomforest_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="/posts/randomforest_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>Both of the charts above have some kind of money related factors in the top 5 most important determining factors, either for social media or campaigning. So more the investment is by a candidate, higher are the chances of winning.</p>
 </div>
 <div id="points-imagine-that-you-are-an-advisor-to-a-candidate-who-is-running-for-a-congressional-seat.-based-on-your-analysis-what-are-your-prescriptions-for-success-for-your-candidate-please-explain." class="section level6">
